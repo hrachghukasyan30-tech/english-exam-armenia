@@ -34,12 +34,16 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .review{text-align:left;margin-top:24px}
 .review-item{padding:12px 0;border-top:1px solid #eaecf0;line-height:1.5}
 .good{color:#15803d}.bad{color:#dc2626}
+#loading{background:#fff;border-radius:16px;padding:22px;text-align:center;line-height:1.6}
+#examContent{display:none}
 @media(max-width:520px){.container{margin:16px auto}.panel,.question{padding:18px}.actions{flex-wrap:wrap}.actions button{min-width:100px}.question h2{font-size:17px}}
 </style>
 </head>
 <body>
 <header><div class="header"><div class="logo">EnglishExam</div><div class="timer" id="timer">120:00</div></div></header>
 <main class="container">
+<div id="loading">Ստուգվում է մուտքը...</div>
+<div id="examContent">
 <section class="panel">
 <h1>Փորձնական քննություն</h1>
 <p class="muted">80 հարց • 120 րոպե • Յուրաքանչյուր ճիշտ պատասխան՝ 0.25 միավոր • Առավելագույնը՝ 20 միավոր</p>
@@ -56,13 +60,23 @@ button:disabled{opacity:.4;cursor:not-allowed}
 </section>
 <button class="finish" id="finishBtn" type="button">Ավարտել քննությունը</button>
 <section class="result" id="result" aria-live="polite"></section>
+</div>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = "https://zkmtvzbbaxwlscarstkc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VWDP871AYiFF0WaE2i03zA_X4P-MB9T";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const questions = [{"q": "Choose the correct answer: She ___ to school every day.", "o": ["go", "goes", "going", "gone"], "a": 1}, {"q": "If I ___ enough money, I would buy a new laptop.", "o": ["have", "had", "will have", "am having"], "a": 1}, {"q": "They have lived here ___ 2019.", "o": ["for", "from", "since", "during"], "a": 2}, {"q": "There isn't ___ milk left in the fridge.", "o": ["many", "a few", "much", "several"], "a": 2}, {"q": "This is the ___ film I have ever seen.", "o": ["good", "better", "best", "well"], "a": 2}, {"q": "My brother ___ his homework when I called him.", "o": ["does", "did", "was doing", "has done"], "a": 2}, {"q": "The letters ___ yesterday.", "o": ["sent", "were sent", "are sending", "send"], "a": 1}, {"q": "You ___ wear a seat belt in a car. It's the law.", "o": ["must", "might", "would", "could"], "a": 0}, {"q": "I enjoy ___ books in my free time.", "o": ["read", "to read", "reading", "reads"], "a": 2}, {"q": "Neither Anna nor her friends ___ ready.", "o": ["is", "are", "was", "be"], "a": 1}, {"q": "We arrived ___ the airport at 6 a.m.", "o": ["in", "on", "at", "to"], "a": 2}, {"q": "He is interested ___ learning languages.", "o": ["on", "at", "in", "for"], "a": 2}, {"q": "I haven't seen Mark ___ last Monday.", "o": ["for", "since", "from", "during"], "a": 1}, {"q": "The weather was ___ cold that we stayed inside.", "o": ["such", "so", "too much", "enough"], "a": 1}, {"q": "By the time we arrived, the concert ___.", "o": ["starts", "started", "had started", "has started"], "a": 2}, {"q": "She asked me where I ___.", "o": ["live", "lived", "am living", "will live"], "a": 1}, {"q": "You don't have to come early. You ___ come at 9.", "o": ["can", "mustn't", "shouldn't", "can't"], "a": 0}, {"q": "If it rains tomorrow, we ___ at home.", "o": ["stay", "stayed", "will stay", "would stay"], "a": 2}, {"q": "I wish I ___ speak French fluently.", "o": ["can", "could", "will", "may"], "a": 1}, {"q": "The man ___ lives next door is a doctor.", "o": ["which", "whose", "who", "where"], "a": 2}, {"q": "Choose the closest meaning of “rapid”.", "o": ["slow", "quick", "careful", "quiet"], "a": 1}, {"q": "Choose the opposite of “generous”.", "o": ["kind", "selfish", "helpful", "polite"], "a": 1}, {"q": "A person who designs buildings is an ___.", "o": ["engineer", "architect", "accountant", "journalist"], "a": 1}, {"q": "Please ___ attention to the instructions.", "o": ["make", "do", "pay", "take"], "a": 2}, {"q": "The meeting was ___ because the manager was ill.", "o": ["put off", "taken up", "looked after", "turned on"], "a": 0}, {"q": "I need to ___ a decision today.", "o": ["do", "make", "take", "get"], "a": 1}, {"q": "She speaks English very ___.", "o": [" fluent", "fluently", "fluency", "more fluent"], "a": 1}, {"q": "The train was delayed due to heavy ___.", "o": ["traffic", "weatherly", "climate", "temperature"], "a": 0}, {"q": "He apologized ___ being late.", "o": ["for", "about", "with", "at"], "a": 0}, {"q": "We ran ___ of sugar, so I went to the shop.", "o": ["away", "out", "over", "off"], "a": 1}, {"q": "Choose the correct word: The instructions were clear and easy to ___.", "o": ["follow", "lead", "carry", "bring"], "a": 0}, {"q": "I am looking forward to ___ you.", "o": ["see", "seeing", "saw", "seen"], "a": 1}, {"q": "Each of the students ___ a certificate.", "o": ["receive", "receives", "are receiving", "have received"], "a": 1}, {"q": "There are ___ people in the library today than yesterday.", "o": ["less", "few", "fewer", "little"], "a": 2}, {"q": "This problem is not as difficult ___ it looks.", "o": ["than", "like", "as", "that"], "a": 2}, {"q": "Hardly had we sat down when the film ___.", "o": ["begins", "began", "had begun", "beginning"], "a": 1}, {"q": "She would rather ___ at home tonight.", "o": ["stay", "to stay", "staying", "stayed"], "a": 0}, {"q": "The book ___ you lent me was fascinating.", "o": ["who", "where", "that", "whose"], "a": 2}, {"q": "I have my car ___.", "o": ["repair", "repaired", "repairing", "to repair"], "a": 1}, {"q": "Despite ___ tired, he finished the work.", "o": ["be", "being", "was", "to be"], "a": 1}, {"q": "Choose the correct form: I ___ this movie twice.", "o": ["see", "saw", "have seen", "am seeing"], "a": 2}, {"q": "When we were children, we ___ play outside every day.", "o": ["use to", "used to", "are used to", "were use to"], "a": 1}, {"q": "You had better ___ a doctor.", "o": ["see", "to see", "seeing", "saw"], "a": 0}, {"q": "No sooner had she arrived ___ it started to snow.", "o": ["when", "than", "then", "that"], "a": 1}, {"q": "The news ___ surprising.", "o": ["are", "were", "is", "have"], "a": 2}, {"q": "He succeeded ___ passing the exam.", "o": ["at", "on", "in", "for"], "a": 2}, {"q": "I prefer tea ___ coffee.", "o": ["than", "from", "to", "over"], "a": 2}, {"q": "The project must ___ by Friday.", "o": ["finish", "be finished", "finished", "be finishing"], "a": 1}, {"q": "If I had known, I ___ you.", "o": ["would help", "will help", "would have helped", "helped"], "a": 2}, {"q": "She is used to ___ up early.", "o": ["get", "got", "getting", "have got"], "a": 2}, {"q": "Choose the correct question tag: You are coming, ___?", "o": ["are you", "aren't you", "don't you", "won't you"], "a": 1}, {"q": "He denied ___ the window.", "o": ["break", "to break", "breaking", "broke"], "a": 2}, {"q": "The teacher made us ___ the exercise again.", "o": ["to do", "doing", "do", "done"], "a": 2}, {"q": "I would like ___ more about the course.", "o": ["know", "knowing", "to know", "knew"], "a": 2}, {"q": "The village is famous ___ its beautiful lake.", "o": ["of", "for", "with", "by"], "a": 1}, {"q": "Please turn ___ the lights before leaving.", "o": ["on", "up", "off", "over"], "a": 2}, {"q": "She has been working here ___ five years.", "o": ["since", "during", "for", "from"], "a": 2}, {"q": "The test was much ___ than I expected.", "o": ["easy", "easier", "easiest", "more easy"], "a": 1}, {"q": "He asked whether I ___ help him.", "o": ["can", "could", "will", "shall"], "a": 1}, {"q": "I don't know ___ she will arrive.", "o": ["what", "which", "when", "whose"], "a": 2}, {"q": "The room needs ___.", "o": ["clean", "cleaning", "to cleaning", "cleaned"], "a": 1}, {"q": "Unless you hurry, you ___ the bus.", "o": ["miss", "missed", "will miss", "would miss"], "a": 2}, {"q": "She is the woman ___ son won the competition.", "o": ["who", "whose", "which", "that"], "a": 1}, {"q": "He speaks as if he ___ everything.", "o": ["know", "knows", "knew", "has know"], "a": 2}, {"q": "Not only the students but also the teacher ___ excited.", "o": ["were", "are", "was", "be"], "a": 2}, {"q": "I regret ___ him the secret.", "o": ["tell", "to tell", "telling", "told"], "a": 2}, {"q": "The flight was cancelled ___ the storm.", "o": ["because", "because of", "although", "despite of"], "a": 1}, {"q": "Choose the closest meaning of “essential”.", "o": ["optional", "necessary", "ordinary", "unusual"], "a": 1}, {"q": "Choose the opposite of “ancient”.", "o": ["historic", "modern", "old", "traditional"], "a": 1}, {"q": "A person who writes news articles is a ___.", "o": ["surgeon", "journalist", "pilot", "chemist"], "a": 1}, {"q": "Could you ___ me a favour?", "o": ["make", "do", "give", "take"], "a": 1}, {"q": "The company plans to ___ a new product next year.", "o": ["launch", "lift", "rise", "grow up"], "a": 0}, {"q": "She was exhausted, ___ she continued working.", "o": ["because", "so", "but", "unless"], "a": 2}, {"q": "We couldn't go out ___ it was raining heavily.", "o": ["although", "because", "despite", "however"], "a": 1}, {"q": "The museum, ___ was built in the 19th century, is closed today.", "o": ["who", "where", "which", "whose"], "a": 2}, {"q": "I have never ___ such a beautiful view.", "o": ["see", "saw", "seen", "seeing"], "a": 2}, {"q": "By next June, they ___ the bridge.", "o": ["complete", "completed", "will have completed", "are completing"], "a": 2}, {"q": "He is responsible ___ organizing the event.", "o": ["to", "for", "of", "with"], "a": 1}, {"q": "Would you mind ___ the window?", "o": ["open", "to open", "opening", "opened"], "a": 2}, {"q": "The more you practise, the ___ you become.", "o": ["good", "best", "better", "well"], "a": 2}];
+
 let current = 0;
 const answers = Array(questions.length).fill(null);
 let remaining = 120 * 60;
 let ended = false;
+let currentUserId = null;
+let clock = null;
 const $ = id => document.getElementById(id);
 
 function render(){
@@ -78,25 +92,49 @@ function render(){
     const radio=document.createElement('input');
     radio.type='radio'; radio.name='answer'; radio.value=index;
     radio.checked=answers[current]===index;
-    radio.addEventListener('change',()=>{answers[current]=index; $('answered').textContent=`Պատասխանված՝ ${answers.filter(x=>x!==null).length} / ${questions.length}`;});
+    radio.addEventListener('change',()=>{
+      answers[current]=index;
+      $('answered').textContent=`Պատասխանված՝ ${answers.filter(x=>x!==null).length} / ${questions.length}`;
+    });
     const span=document.createElement('span');
     span.textContent=String.fromCharCode(65+index)+'. '+option.trim();
-    label.append(radio,span); $('options').appendChild(label);
+    label.append(radio,span);
+    $('options').appendChild(label);
   });
   $('prevBtn').disabled=current===0;
   $('nextBtn').textContent=current===questions.length-1?'Վերջին հարցն է':'Հաջորդ →';
 }
+
 $('prevBtn').addEventListener('click',()=>{if(current>0){current--;render();}});
 $('nextBtn').addEventListener('click',()=>{if(current<questions.length-1){current++;render();}});
-function finish(){
+
+async function finish(){
   if(ended)return;
-  ended=true; clearInterval(clock);
+  ended=true;
+  if(clock)clearInterval(clock);
+
   const correct=answers.reduce((sum,a,i)=>sum+(a===questions[i].a?1:0),0);
   const score=correct*0.25;
+
   $('questionCard').style.display='none';
   $('finishBtn').style.display='none';
   $('result').style.display='block';
-  let html=`<h2>Քննությունն ավարտված է</h2><div class="score">${score.toFixed(2)} / 20</div><p>Ճիշտ պատասխաններ՝ ${correct} / ${questions.length}</p><p>Սխալ կամ չպատասխանված՝ ${questions.length-correct}</p><div class="review"><h3>Պատասխանների ստուգում</h3>`;
+  $('result').innerHTML='<h2>Քննությունն ավարտված է</h2><p>Արդյունքը պահպանվում է...</p>';
+
+  const { error } = await supabaseClient
+    .from('exam_results')
+    .insert({
+      user_id: currentUserId,
+      score: score,
+      correct_answers: correct,
+      total_questions: questions.length
+    });
+
+  let saveMessage = error
+    ? '<p class="bad">Արդյունքը չհաջողվեց պահպանել։ Խնդրում ենք ստուգել ինտերնետը և Supabase-ի կարգավորումները։</p>'
+    : '<p class="good">Արդյունքը պահպանվեց քո անձնական էջում։</p>';
+
+  let html=`<h2>Քննությունն ավարտված է</h2><div class="score">${score.toFixed(2)} / 20</div><p>Ճիշտ պատասխաններ՝ ${correct} / ${questions.length}</p><p>Սխալ կամ չպատասխանված՝ ${questions.length-correct}</p>${saveMessage}<div class="review"><h3>Պատասխանների ստուգում</h3>`;
   questions.forEach((q,i)=>{
     const ok=answers[i]===q.a;
     html+=`<div class="review-item"><strong>${i+1}. ${q.q}</strong><br><span class="${ok?'good':'bad'}">${ok?'Ճիշտ':'Սխալ կամ բաց թողնված'}</span><br>Ճիշտ պատասխան՝ ${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</div>`;
@@ -104,19 +142,42 @@ function finish(){
   $('result').innerHTML=html+'</div>';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
 $('finishBtn').addEventListener('click',()=>{
   const unanswered=answers.filter(x=>x===null).length;
   if(unanswered>0 && !confirm(`Դեռ ${unanswered} հարցի չես պատասխանել։ Ավարտե՞լ քննությունը։`))return;
   finish();
 });
+
 function updateTimer(){
   const m=Math.floor(remaining/60),s=remaining%60;
   $('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   if(remaining<=0){finish();return;}
   remaining--;
 }
-const clock=setInterval(updateTimer,1000);
-render();
+
+async function initExam(){
+  try {
+    const { data, error } = await supabaseClient.auth.getSession();
+    if(error) throw error;
+    if(!data.session){
+      alert('Քննությունը սկսելու համար նախ մուտք գործիր քո հաշիվ։');
+      window.location.href='index.html#account';
+      return;
+    }
+    currentUserId=data.session.user.id;
+    $('loading').style.display='none';
+    $('examContent').style.display='block';
+    render();
+    updateTimer();
+    clock=setInterval(updateTimer,1000);
+  } catch(error) {
+    console.error('Authentication error:', error);
+    $('loading').textContent='Մուտքի ստուգման ժամանակ սխալ առաջացավ։ Թարմացրու էջը կամ նորից մուտք գործիր։';
+  }
+}
+
+initExam();
 </script>
 </body>
 </html>
