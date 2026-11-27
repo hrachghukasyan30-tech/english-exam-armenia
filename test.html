@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EnglishExam — 80 Հարց</title>
+<title>EnglishExam — Փորձնական քննություն</title>
 
 <style>
 * {
@@ -21,118 +21,118 @@ body {
 header {
   background: #111827;
   color: white;
-  padding: 16px 20px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
+  padding: 18px 20px;
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
+.header {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .logo {
-  font-size: 21px;
+  font-size: 22px;
   font-weight: bold;
 }
 
 .timer {
   background: #dc2626;
-  padding: 10px 15px;
+  padding: 9px 15px;
   border-radius: 10px;
+  font-size: 18px;
   font-weight: bold;
-  min-width: 82px;
-  text-align: center;
 }
 
 .container {
-  max-width: 850px;
+  max-width: 900px;
   margin: 30px auto;
-  padding: 0 15px;
+  padding: 0 15px 50px;
 }
 
-.info {
+.title {
   background: white;
-  padding: 20px;
+  padding: 25px;
   border-radius: 15px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.06);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.title h1 {
+  margin-top: 0;
 }
 
 .question {
   background: white;
-  padding: 20px;
-  margin-bottom: 16px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.06);
+  margin-bottom: 18px;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.05);
 }
 
-.question-number {
-  color: #2563eb;
-  font-weight: bold;
+.question h3 {
+  margin-top: 0;
+  font-size: 17px;
 }
 
 .option {
   display: block;
-  background: #f1f5f9;
-  padding: 13px;
+  background: #f3f4f6;
   margin: 9px 0;
+  padding: 13px;
   border-radius: 9px;
   cursor: pointer;
 }
 
 .option:hover {
-  background: #e2e8f0;
+  background: #e5e7eb;
 }
 
 .option input {
   margin-right: 8px;
 }
 
-.submit {
+.finish {
   width: 100%;
   border: 0;
   background: #2563eb;
   color: white;
   padding: 16px;
-  border-radius: 11px;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: bold;
+  border-radius: 12px;
   cursor: pointer;
-  margin-bottom: 30px;
 }
 
-.submit:hover {
+.finish:hover {
   background: #1d4ed8;
 }
 
-#result {
+.result {
   display: none;
   background: white;
+  margin-top: 25px;
   padding: 30px;
   border-radius: 15px;
   text-align: center;
 }
 
-.result-score {
-  font-size: 48px;
+.score {
+  font-size: 42px;
   font-weight: bold;
   color: #2563eb;
-  margin: 15px 0;
 }
 
-.result-info {
-  font-size: 18px;
-  line-height: 1.8;
+.correct {
+  color: #16a34a;
 }
 
-.back {
-  display: inline-block;
-  margin-top: 20px;
-  text-decoration: none;
-  color: #2563eb;
-  font-weight: bold;
+.wrong {
+  color: #dc2626;
 }
 </style>
 </head>
@@ -140,238 +140,23 @@ header {
 <body>
 
 <header>
-
-<div class="logo">
-EnglishExam
-</div>
-
-<div class="timer" id="timer">
-120:00
-</div>
-
+  <div class="header">
+    <div class="logo">EnglishExam</div>
+    <div class="timer" id="timer">120:00</div>
+  </div>
 </header>
 
 <div class="container">
 
-<div class="info">
+  <div class="title">
+    <h1>Փորձնական քննություն</h1>
+    <p>80 հարց • 120 րոպե • Առավելագույնը՝ 20 միավոր</p>
+  </div>
 
-<h1>Փորձնական քննություն</h1>
+  <form id="examForm">
 
-<p>
-📚 Հարցերի քանակը՝ <b>80</b>
-</p>
+    <div class="question">
+      <h3>1. Choose the correct answer.</h3>
 
-<p>
-⏱ Ժամանակը՝ <b>120 րոպե</b>
-</p>
-
-<p>
-⭐ Յուրաքանչյուր ճիշտ պատասխան՝ <b>0.25 միավոր</b>
-</p>
-
-<p>
-🏆 Առավելագույն արդյունք՝ <b>20/20</b>
-</p>
-
-</div>
-
-<form id="examForm">
-
-<div id="questions"></div>
-
-<button type="submit" class="submit">
-Ավարտել քննությունը
-</button>
-
-</form>
-
-<div id="result">
-
-<h2>Քննությունն ավարտված է 🎉</h2>
-
-<div class="result-score" id="score">
-0/20
-</div>
-
-<div class="result-info" id="details"></div>
-
-<a href="index.html" class="back">
-← Վերադառնալ գլխավոր էջ
-</a>
-
-</div>
-
-</div>
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-const questionsContainer =
-document.getElementById("questions");
-
-
-/*
-  Այստեղ են հարցերը։
-
-  answer = ճիշտ պատասխանի տառը։
-*/
-
-const questions = [
-
-{
-q: "She ___ to school every day.",
-a: ["go", "goes", "going", "gone"],
-answer: "b"
-},
-
-{
-q: "I ___ this movie before.",
-a: ["have seen", "has seen", "seeing", "saw"],
-answer: "a"
-},
-
-{
-q: "If I ___ more time, I would travel more.",
-a: ["have", "had", "will have", "having"],
-answer: "b"
-},
-
-{
-q: "He is good ___ mathematics.",
-a: ["in", "on", "at", "for"],
-answer: "c"
-},
-
-{
-q: "They ___ football when it started raining.",
-a: ["played", "were playing", "are playing", "have played"],
-answer: "b"
-}
-
-];
-
-
-/*
-  Մինչև 80 հարցը լրացնելը,
-  համակարգը ստեղծում է մնացած հարցերը
-  ժամանակավորապես։
-*/
-
-while (questions.length < 80) {
-
-  let number = questions.length + 1;
-
-  questions.push({
-    q: "Practice question " + number,
-    a: [
-      "Answer A",
-      "Answer B",
-      "Answer C",
-      "Answer D"
-    ],
-    answer: "a"
-  });
-
-}
-
-
-/* Ստեղծում ենք 80 հարցը */
-
-questions.forEach(function (item, index) {
-
-  const number = index + 1;
-
-  const div = document.createElement("div");
-
-  div.className = "question";
-
-  div.innerHTML = `
-
-    <div class="question-number">
-      Հարց ${number} / 80
-    </div>
-
-    <h3>${item.q}</h3>
-
-    <label class="option">
-      <input type="radio"
-             name="q${number}"
-             value="a">
-      A) ${item.a[0]}
-    </label>
-
-    <label class="option">
-      <input type="radio"
-             name="q${number}"
-             value="b">
-      B) ${item.a[1]}
-    </label>
-
-    <label class="option">
-      <input type="radio"
-             name="q${number}"
-             value="c">
-      C) ${item.a[2]}
-    </label>
-
-    <label class="option">
-      <input type="radio"
-             name="q${number}"
-             value="d">
-      D) ${item.a[3]}
-    </label>
-
-  `;
-
-  questionsContainer.appendChild(div);
-
-});
-
-
-/* 120 րոպե */
-
-let timeLeft = 120 * 60;
-
-const timer =
-document.getElementById("timer");
-
-
-function updateTimer() {
-
-  let minutes =
-  Math.floor(timeLeft / 60);
-
-  let seconds =
-  timeLeft % 60;
-
-  timer.textContent =
-    String(minutes).padStart(2, "0")
-    + ":" +
-    String(seconds).padStart(2, "0");
-
-}
-
-
-updateTimer();
-
-
-const countdown =
-setInterval(function () {
-
-  timeLeft--;
-
-  if (timeLeft <= 0) {
-
-    timeLeft = 0;
-
-    updateTimer();
-
-    clearInterval(countdown);
-
-    finishExam();
-
-    return;
-  }
-
-  update
+      <label class="option">
+        <input type="radio" name="q
