@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>English Exam — Փորձնական քննություն</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #172033;
+}
+
+header {
+  background: #111827;
+  color: white;
+  padding: 22px 18px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+header p {
+  margin-top: 8px;
+  color: #b9c3d4;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.hero {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 25px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+
+.hero h1 {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: #667085;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.start-btn {
+  background: #2563eb;
+  color: white;
+  width: 100%;
+  max-width: 320px;
+}
+
+.start-btn:hover {
+  background: #1d4ed8;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.card b {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 7px;
+}
+
+.card span {
+  color: #667085;
+}
+
+#testPage {
+  display: none;
+}
+
+.question-box {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.07);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.timer {
+  color: #dc2626;
+}
+
+.answers {
+  margin-top: 20px;
+}
+
+.answer {
+  display: block;
+  background: #f3f4f6;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.answer:hover {
+  background: #e5e7eb;
+}
+
+.answer input {
+  margin-right: 10px;
+}
+
+.next-btn {
+  margin-top: 20px;
+  background: #111827;
+  color: white;
+  width: 100%;
+}
+
+.result {
+  text-align: center;
+}
+
+.score {
+  font-size: 50px;
+  font-weight: 800;
+  color: #2563eb;
+  margin: 20px 0;
+}
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 25px;
+  }
+
+  .info {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    margin: 20px auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">ENGLISH EXAM</div>
+  <p>Միասնական քննության օնլայն փորձնական հարթակ</p>
+</header>
+
+<div class="container">
+
+<section id="homePage">
+
+  <div class="hero">
+
+    <h1>Պատրաստվիր անգլերենի քննությանը</h1>
+
+    <p>
+      Անցիր փորձնական քննություն, ստուգիր գիտելիքներդ
+      և տես արդյունքդ։
+    </p>
+
+    <button class="start-btn" onclick="startTest()">
+      Սկսել փորձնական քննությունը
+    </button>
+
+  </div>
+
+  <div class="info">
+
+    <div class="card">
+      <b>📝</b>
+      <span>Փորձնական թեստեր</span>
+    </div>
+
+    <div class="card">
+      <b>⏱️</b>
+      <span>120 րոպե</span>
+    </div>
+
+    <div class="card">
+      <b>📊</b>
+      <span>Ավտոմատ արդյունք</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section id="testPage">
+
+  <div class="question-box">
+
+    <div class="top">
+
+      <span id="questionNumber"></span>
+
+      <span class="timer" id="timer">
+        120:00
+      </span>
+
+    </div>
+
+    <h2 id="questionText"></h2>
+
+    <div class="answers" id="answers"></div>
+
+    <button class="next-btn" onclick="nextQuestion()">
+      Հաջորդ հարց →
+    </button>
+
+  </div>
+
+</section>
+
+
+<section id="resultPage" style="display:none">
+
+  <div class="hero result">
+
+    <h1>Քննությունն ավարտված է 🎉</h1>
+
+    <div class="score" id="score"></div>
+
+    <p id="resultText"></p>
+
+    <button class="start-btn" onclick="location.reload()">
+      Նորից փորձել
+    </button>
+
+  </div>
+
+</section>
+
+</div>
+
+
+<script>
+
+const questions = [
+
+  {
+    question: "Choose the correct answer: She ___ to school every day.",
+    answers: ["go", "goes", "going", "gone"],
+    correct: 1
+  },
+
+  {
+    question: "Choose the correct answer: They ___ football yesterday.",
+    answers: ["play", "plays", "played", "playing"],
+    correct: 2
+  },
+
+  {
+    question: "Choose the correct answer: I ___ my homework already.",
+    answers: [
+      "have finished",
+      "finish",
+      "finishing",
+      "finished"
+    ],
+    correct: 0
+  },
+
+  {
+    question: "Choose the correct answer: If I ___ more time, I would travel.",
+    answers: [
+      "have",
+      "had",
+      "will have",
+      "having"
+    ],
+    correct: 1
+  },
+
+  {
+    question: "Choose the correct answer: He is ___ than his brother.",
+    answers: [
+      "tall",
+      "taller",
+      "tallest",
+      "more tall"
+    ],
+    correct: 1
+  }
+
+];
+
+
+let currentQuestion = 0;
+let score = 0;
+
+/* 120 րոպե = 7200 վայրկյան */
+let time = 120 * 60;
+
+let timerInterval;
+
+
+function startTest() {
+
+  document.getElementById("homePage").style.display = "none";
+
+  document.getElementById("testPage").style.display = "block";
+
+  showQuestion();
+
+  timerInterval = setInterval(function() {
+
+    time--;
+
+    let minutes = Math.floor(time / 60);
+
+    let seconds = time % 60;
+
+    document.getElementById("timer").textContent =
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(seconds).padStart(2, "0");
+
+    if (time <= 0) {
+
+      finishTest();
+
+    }
+
+  }, 1000);
+
+}
+
+
+function showQuestion() {
+
+  const q = questions[currentQuestion];
+
+  document.getElementById("questionNumber").textContent =
+    `Հարց ${currentQuestion + 1} / ${questions.length}`;
+
+  document.getElementById("questionText").textContent =
+    q.question;
+
+  const answersDiv =
+    document.getElementById("answers");
+
+  answersDiv.innerHTML = "";
+
+  q.answers.forEach(function(answer, index) {
+
+    answersDiv.innerHTML += `
+
+      <label class="answer">
+
+        <input
+          type="radio"
+          name="answer"
+          value="${index}"
+        >
+
+        ${String.fromCharCode(65 + index)}) ${answer}
+
+      </label>
+
+    `;
+
+  });
+
+}
+
+
+function nextQuestion() {
+
+  const selected =
+    document.querySelector(
+      'input[name="answer"]:checked'
+    );
+
+  if (!selected) {
+
+    alert("Ընտրիր պատասխան։");
+
+    return;
+
+  }
+
+  if (
+    Number(selected.value) ===
+    questions[currentQuestion].correct
+  ) {
+
+    score++;
+
+  }
+
+  currentQuestion++;
+
+  if (
+    currentQuestion >= questions.length
+  ) {
+
+    finishTest();
+
+  } else {
+
+    showQuestion();
+
+  }
+
+}
+
+
+function finishTest() {
+
+  clearInterval(timerInterval);
+
+  document.getElementById("testPage")
+    .style.display = "none";
+
+  document.getElementById("resultPage")
+    .style.display = "block";
+
+  document.getElementById("score").textContent =
+    `${score} / ${questions.length}`;
+
+  const percent =
+    Math.round(
+      (score / questions.length) * 100
+    );
+
+  document.getElementById("resultText").textContent =
+    `Քո արդյունքը՝ ${percent}%`;
+
+}
+
+</script>
+
+</body>
+</html>
