@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hy">
 <head>
@@ -47,7 +46,7 @@ section{max-width:1100px;margin:auto;padding:65px 20px}
 footer{background:#101828;color:#98a2b3;text-align:center;padding:28px 20px;font-size:13px}
 
 /* ACCOUNT */
-.account-section{max-width:750px}
+.account-section{max-width:850px}
 .account-card{background:white;border:1px solid #eaecf0;border-radius:20px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.05)}
 .account-card h2{margin-bottom:12px}
 .account-card p{color:#667085;line-height:1.6}
@@ -58,9 +57,82 @@ footer{background:#101828;color:#98a2b3;text-align:center;padding:28px 20px;font
 .secondary-btn{background:#eef2ff;color:#1d4ed8;padding:14px;border:0;border-radius:10px;font-weight:bold;cursor:pointer}
 #message{margin-top:15px;font-size:14px;line-height:1.5}
 #dashboard{display:none;margin-top:22px}
+
+/* DASHBOARD STATS */
+.dashboard-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:20px 0;
+}
+.dashboard-stat{
+  background:#f8fafc;
+  border:1px solid #eaecf0;
+  border-radius:14px;
+  padding:18px;
+  text-align:center;
+}
+.dashboard-stat .value{
+  display:block;
+  font-size:26px;
+  font-weight:900;
+  color:#2563eb;
+  margin-bottom:5px;
+}
+.dashboard-stat .label{
+  color:#667085;
+  font-size:13px;
+}
+
+.chart-box{
+  margin-top:20px;
+  padding:20px;
+  background:#f8fafc;
+  border:1px solid #eaecf0;
+  border-radius:15px;
+}
+.chart-box h3{margin-bottom:15px}
+.chart{
+  height:210px;
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  overflow-x:auto;
+  padding:15px 5px 25px;
+}
+.chart-empty{color:#667085;font-size:14px}
+.bar-wrap{
+  min-width:38px;
+  height:170px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  position:relative;
+}
+.chart-bar{
+  width:28px;
+  min-height:4px;
+  background:#2563eb;
+  border-radius:7px 7px 3px 3px;
+}
+.bar-score{
+  position:absolute;
+  top:-2px;
+  font-size:10px;
+  font-weight:bold;
+  color:#344054;
+}
+.bar-number{
+  position:absolute;
+  bottom:-21px;
+  font-size:10px;
+  color:#667085;
+}
 .result-item{padding:15px;border:1px solid #eaecf0;border-radius:12px;margin-top:10px}
 .result-item strong{color:#1d4ed8}
 .small-btn{background:#e5e7eb;color:#172033;padding:10px 15px;border:0;border-radius:9px;cursor:pointer;font-weight:bold}
+
 @media(max-width:750px){
 .menu{display:none}
 .hero{padding:50px 20px}
@@ -69,6 +141,7 @@ footer{background:#101828;color:#98a2b3;text-align:center;padding:28px 20px;font
 .test-card{flex-direction:column;align-items:flex-start}
 .test-card .main-btn{width:100%;text-align:center}
 .account-buttons{flex-direction:column}
+.dashboard-stats{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -159,8 +232,32 @@ footer{background:#101828;color:#98a2b3;text-align:center;padding:28px 20px;font
 
 <div id="dashboard">
 <p><strong id="userEmail"></strong></p>
-<h3 style="margin-top:20px">Իմ քննությունների արդյունքները</h3>
+
+<div class="dashboard-stats">
+<div class="dashboard-stat">
+<span class="value" id="examCount">0</span>
+<span class="label">Քննությունների քանակ</span>
+</div>
+<div class="dashboard-stat">
+<span class="value" id="bestScore">0.00</span>
+<span class="label">Լավագույն արդյունք / 20</span>
+</div>
+<div class="dashboard-stat">
+<span class="value" id="averageScore">0.00</span>
+<span class="label">Միջին արդյունք / 20</span>
+</div>
+</div>
+
+<div class="chart-box">
+<h3>📈 Քո արդյունքների առաջընթացը</h3>
+<div id="chart" class="chart">
+<p class="chart-empty">Տվյալները բեռնվում են...</p>
+</div>
+</div>
+
+<h3 style="margin-top:25px">Իմ քննությունների արդյունքները</h3>
 <div id="history"><p>Բեռնվում է...</p></div>
+
 <button class="small-btn" id="logoutBtn" style="margin-top:18px">Դուրս գալ</button>
 </div>
 </div>
@@ -206,10 +303,57 @@ const message = document.getElementById("message");
 const authArea = document.getElementById("authArea");
 const dashboard = document.getElementById("dashboard");
 const historyArea = document.getElementById("history");
+const chartArea = document.getElementById("chart");
 
 function showMessage(text, color = "#344054") {
   message.textContent = text;
   message.style.color = color;
+}
+
+function updateStatistics(data) {
+  const count = data.length;
+
+  document.getElementById("examCount").textContent = count;
+
+  if (count === 0) {
+    document.getElementById("bestScore").textContent = "0.00";
+    document.getElementById("averageScore").textContent = "0.00";
+    chartArea.innerHTML = '<p class="chart-empty">Դեռ բավարար տվյալներ չկան։</p>';
+    return;
+  }
+
+  const scores = data.map(item => Number(item.score) || 0);
+  const best = Math.max(...scores);
+  const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+
+  document.getElementById("bestScore").textContent = best.toFixed(2);
+  document.getElementById("averageScore").textContent = average.toFixed(2);
+
+  chartArea.innerHTML = "";
+
+  /* Գրաֆիկում ցույց ենք տալիս վերջին 10 քննությունները՝ հինից նոր։ */
+  const chartData = [...data].reverse().slice(-10);
+
+  chartData.forEach((item, index) => {
+    const score = Math.max(0, Math.min(20, Number(item.score) || 0));
+    const wrap = document.createElement("div");
+    wrap.className = "bar-wrap";
+
+    const scoreText = document.createElement("div");
+    scoreText.className = "bar-score";
+    scoreText.textContent = score.toFixed(2);
+
+    const bar = document.createElement("div");
+    bar.className = "chart-bar";
+    bar.style.height = Math.max(4, (score / 20) * 150) + "px";
+
+    const number = document.createElement("div");
+    number.className = "bar-number";
+    number.textContent = "#" + (index + 1);
+
+    wrap.append(scoreText, bar, number);
+    chartArea.appendChild(wrap);
+  });
 }
 
 async function loadHistory(user) {
@@ -223,8 +367,11 @@ async function loadHistory(user) {
 
   if (error) {
     historyArea.textContent = "Արդյունքները բեռնել չհաջողվեց։ " + error.message;
+    chartArea.innerHTML = '<p class="chart-empty">Վիճակագրությունը հասանելի չէ։</p>';
     return;
   }
+
+  updateStatistics(data || []);
 
   if (!data || data.length === 0) {
     historyArea.innerHTML = "<p>Դեռ պահպանված քննության արդյունքներ չկան։</p>";
@@ -240,7 +387,7 @@ async function loadHistory(user) {
     const date = new Date(result.completed_at).toLocaleString("hy-AM");
 
     const heading = document.createElement("strong");
-    heading.textContent = "Արդյունք՝ " + result.score + " / 20";
+    heading.textContent = "Արդյունք՝ " + Number(result.score).toFixed(2) + " / 20";
 
     const details = document.createElement("p");
     details.textContent =
@@ -262,13 +409,17 @@ async function updateAccount() {
   if (user) {
     authArea.style.display = "none";
     dashboard.style.display = "block";
+
     document.getElementById("userEmail").textContent = user.email;
+
     document.getElementById("accountIntro").textContent =
       "Բարի գալուստ քո անձնական էջ։";
+
     await loadHistory(user);
   } else {
     authArea.style.display = "grid";
     dashboard.style.display = "none";
+
     document.getElementById("accountIntro").textContent =
       "Գրանցվիր կամ մուտք գործիր՝ քննությունների արդյունքները պահպանելու համար։";
   }
@@ -356,7 +507,12 @@ document.getElementById("startTest").addEventListener("click", async (event) => 
 
   if (!data.session) {
     event.preventDefault();
-    showMessage("Թեստը սկսելու համար նախ մուտք գործիր կամ գրանցվիր։", "red");
+
+    showMessage(
+      "Թեստը սկսելու համար նախ մուտք գործիր կամ գրանցվիր։",
+      "red"
+    );
+
     document.getElementById("account").scrollIntoView({
       behavior: "smooth"
     });
