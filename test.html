@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>EnglishExam — Փորձնական քննություն</title>
 
 <style>
@@ -33,40 +32,39 @@ header {
 }
 
 .timer {
-  background: #ef4444;
-  padding: 10px 16px;
+  background: #dc2626;
+  padding: 10px 15px;
   border-radius: 10px;
   font-weight: bold;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 850px;
   margin: 30px auto;
-  padding: 0 16px;
+  padding: 0 15px;
+}
+
+.info,
+.question,
+#result {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.06);
 }
 
 .info {
-  background: white;
   padding: 20px;
-  border-radius: 15px;
   margin-bottom: 20px;
 }
 
 .question {
-  background: white;
   padding: 22px;
   margin-bottom: 18px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.question h3 {
-  margin-top: 0;
 }
 
 .option {
   display: block;
-  padding: 12px;
+  padding: 13px;
   margin: 9px 0;
   background: #f1f5f9;
   border-radius: 9px;
@@ -83,11 +81,11 @@ header {
 
 button {
   width: 100%;
-  padding: 15px;
-  border: none;
-  border-radius: 10px;
+  border: 0;
   background: #2563eb;
   color: white;
+  padding: 16px;
+  border-radius: 10px;
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
@@ -99,17 +97,23 @@ button:hover {
 
 #result {
   display: none;
-  background: white;
   padding: 30px;
-  border-radius: 15px;
   text-align: center;
-  margin-top: 25px;
 }
 
 .score {
-  font-size: 42px;
+  font-size: 45px;
   font-weight: bold;
   color: #2563eb;
+  margin: 15px 0;
+}
+
+.back {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -123,160 +127,230 @@ button:hover {
 
 <div class="container">
 
-  <div class="info">
-    <h2>Փորձնական քննություն</h2>
-    <p>⏱ Տևողություն՝ 120 րոպե</p>
-    <p>Ընտրիր յուրաքանչյուր հարցի ճիշտ պատասխանը։</p>
-  </div>
+<div class="info">
+  <h1>Փորձնական քննություն</h1>
+  <p>⏱ Տևողություն՝ 120 րոպե</p>
+  <p>Ընտրիր ճիշտ պատասխանը և վերջում սեղմիր կոճակը։</p>
+</div>
 
-  <form id="examForm">
+<form id="examForm">
 
-    <div class="question">
-      <h3>1. Choose the correct answer.</h3>
+<div class="question">
+<h3>1. She ___ to school every day.</h3>
 
-      <label class="option">
-        <input type="radio" name="q1" value="a">
-        A) She go to school every day.
-      </label>
+<label class="option">
+<input type="radio" name="q1" value="a">
+A) go
+</label>
 
-      <label class="option">
-        <input type="radio" name="q1" value="b">
-        B) She goes to school every day.
-      </label>
+<label class="option">
+<input type="radio" name="q1" value="b">
+B) goes
+</label>
 
-      <label class="option">
-        <input type="radio" name="q1" value="c">
-        C) She going to school every day.
-      </label>
+<label class="option">
+<input type="radio" name="q1" value="c">
+C) going
+</label>
 
-      <label class="option">
-        <input type="radio" name="q1" value="d">
-        D) She gone to school every day.
-      </label>
-    </div>
+<label class="option">
+<input type="radio" name="q1" value="d">
+D) gone
+</label>
+</div>
 
+<div class="question">
+<h3>2. I ___ this movie before.</h3>
 
-    <div class="question">
-      <h3>2. Choose the correct word.</h3>
+<label class="option">
+<input type="radio" name="q2" value="a">
+A) have seen
+</label>
 
-      <label class="option">
-        <input type="radio" name="q2" value="a">
-        A) beautiful
-      </label>
+<label class="option">
+<input type="radio" name="q2" value="b">
+B) has seen
+</label>
 
-      <label class="option">
-        <input type="radio" name="q2" value="b">
-        B) beauty
-      </label>
+<label class="option">
+<input type="radio" name="q2" value="c">
+C) seeing
+</label>
 
-      <label class="option">
-        <input type="radio" name="q2" value="c">
-        C) beautifully
-      </label>
+<label class="option">
+<input type="radio" name="q2" value="d">
+D) sawed
+</label>
+</div>
 
-      <label class="option">
-        <input type="radio" name="q2" value="d">
-        D) beautify
-      </label>
-    </div>
+<div class="question">
+<h3>3. If I ___ more time, I would travel more.</h3>
 
+<label class="option">
+<input type="radio" name="q3" value="a">
+A) have
+</label>
 
-    <div class="question">
-      <h3>3. Complete the sentence.</h3>
+<label class="option">
+<input type="radio" name="q3" value="b">
+B) had
+</label>
 
-      <p>If I ___ more time, I would learn another language.</p>
+<label class="option">
+<input type="radio" name="q3" value="c">
+C) will have
+</label>
 
-      <label class="option">
-        <input type="radio" name="q3" value="a">
-        A) have
-      </label>
+<label class="option">
+<input type="radio" name="q3" value="d">
+D) having
+</label>
+</div>
 
-      <label class="option">
-        <input type="radio" name="q3" value="b">
-        B) had
-      </label>
+<div class="question">
+<h3>4. He is good ___ mathematics.</h3>
 
-      <label class="option">
-        <input type="radio" name="q3" value="c">
-        C) will have
-      </label>
+<label class="option">
+<input type="radio" name="q4" value="a">
+A) in
+</label>
 
-      <label class="option">
-        <input type="radio" name="q3" value="d">
-        D) having
-      </label>
-    </div>
+<label class="option">
+<input type="radio" name="q4" value="b">
+B) on
+</label>
 
+<label class="option">
+<input type="radio" name="q4" value="c">
+C) at
+</label>
 
-    <div class="question">
-      <h3>4. Choose the correct answer.</h3>
+<label class="option">
+<input type="radio" name="q4" value="d">
+D) for
+</label>
+</div>
 
-      <p>They ___ in London since 2020.</p>
+<div class="question">
+<h3>5. They ___ football when it started raining.</h3>
 
-      <label class="option">
-        <input type="radio" name="q4" value="a">
-        A) live
-      </label>
+<label class="option">
+<input type="radio" name="q5" value="a">
+A) played
+</label>
 
-      <label class="option">
-        <input type="radio" name="q4" value="b">
-        B) lived
-      </label>
+<label class="option">
+<input type="radio" name="q5" value="b">
+B) were playing
+</label>
 
-      <label class="option">
-        <input type="radio" name="q4" value="c">
-        C) have lived
-      </label>
+<label class="option">
+<input type="radio" name="q5" value="c">
+C) are playing
+</label>
 
-      <label class="option">
-        <input type="radio" name="q4" value="d">
-        D) are living
-      </label>
-    </div>
+<label class="option">
+<input type="radio" name="q5" value="d">
+D) have played
+</label>
+</div>
 
+<button type="submit">Ավարտել քննությունը</button>
 
-    <div class="question">
-      <h3>5. Choose the correct answer.</h3>
+</form>
 
-      <p>He is ___ than his brother.</p>
+<div id="result">
 
-      <label class="option">
-        <input type="radio" name="q5" value="a">
-        A) tall
-      </label>
+<h2>Քննությունն ավարտված է 🎉</h2>
 
-      <label class="option">
-        <input type="radio" name="q5" value="b">
-        B) taller
-      </label>
+<div class="score" id="score">0%</div>
 
-      <label class="option">
-        <input type="radio" name="q5" value="c">
-        C) tallest
-      </label>
+<p id="details"></p>
 
-      <label class="option">
-        <input type="radio" name="q5" value="d">
-        D) more tall
-      </label>
-    </div>
+<a class="back" href="index.html">
+← Վերադառնալ գլխավոր էջ
+</a>
 
-    <button type="submit">Հանձնել քննությունը</button>
-
-  </form>
-
-  <div id="result">
-    <h2>Քննությունն ավարտված է 🎉</h2>
-
-    <div class="score" id="score"></div>
-
-    <p id="message"></p>
-
-    <button onclick="location.reload()">Նորից սկսել</button>
-  </div>
+</div>
 
 </div>
 
 <script>
 
 let time = 120 * 60;
+
+const timer = document.getElementById("timer");
+
+const answers = {
+  q1: "b",
+  q2: "a",
+  q3: "b",
+  q4: "c",
+  q5: "b"
+};
+
+const countdown = setInterval(function () {
+
+  let minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+
+  timer.textContent =
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(seconds).padStart(2, "0");
+
+  if (time === 0) {
+    clearInterval(countdown);
+    finishExam();
+  }
+
+  time--;
+
+}, 1000);
+
+
+document.getElementById("examForm").addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  finishExam();
+
+});
+
+
+function finishExam() {
+
+  clearInterval(countdown);
+
+  let correct = 0;
+  let total = Object.keys(answers).length;
+
+  for (let question in answers) {
+
+    let selected = document.querySelector(
+      'input[name="' + question + '"]:checked'
+    );
+
+    if (selected && selected.value === answers[question]) {
+      correct++;
+    }
+
+  }
+
+  let percentage = Math.round((correct / total) * 100);
+
+  document.getElementById("examForm").style.display = "none";
+
+  document.getElementById("result").style.display = "block";
+
+  document.getElementById("score").textContent =
+    percentage + "%";
+
+  document.getElementById("details").textContent =
+    "Ճիշտ պատասխաններ՝ " + correct + " / " + total;
+}
+
+</script>
+
+</body>
+</html>
