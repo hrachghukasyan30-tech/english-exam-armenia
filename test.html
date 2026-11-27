@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>EnglishExam — Փորձնական քննություն</title>
 
 <style>
@@ -36,6 +37,8 @@ header {
   padding: 10px 15px;
   border-radius: 10px;
   font-weight: bold;
+  min-width: 80px;
+  text-align: center;
 }
 
 .container {
@@ -91,10 +94,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background: #1d4ed8;
-}
-
 #result {
   display: none;
   padding: 30px;
@@ -129,7 +128,7 @@ button:hover {
 
 <div class="info">
   <h1>Փորձնական քննություն</h1>
-  <p>⏱ Տևողություն՝ 120 րոպե</p>
+  <p>⏱ Տևողություն՝ <b>120 րոպե</b></p>
   <p>Ընտրիր ճիշտ պատասխանը և վերջում սեղմիր կոճակը։</p>
 </div>
 
@@ -255,7 +254,9 @@ D) have played
 </label>
 </div>
 
-<button type="submit">Ավարտել քննությունը</button>
+<button type="submit">
+Ավարտել քննությունը
+</button>
 
 </form>
 
@@ -276,80 +277,98 @@ D) have played
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-let time = 120 * 60;
+  const timer = document.getElementById("timer");
+  const form = document.getElementById("examForm");
+  const result = document.getElementById("result");
 
-const timer = document.getElementById("timer");
+  let timeLeft = 120 * 60;
 
-const answers = {
-  q1: "b",
-  q2: "a",
-  q3: "b",
-  q4: "c",
-  q5: "b"
-};
+  function updateTimer() {
 
-const countdown = setInterval(function () {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
 
-  let minutes = Math.floor(time / 60);
-  let seconds = time % 60;
+    timer.textContent =
+      minutes.toString().padStart(2, "0") +
+      ":" +
+      seconds.toString().padStart(2, "0");
 
-  timer.textContent =
-    String(minutes).padStart(2, "0") +
-    ":" +
-    String(seconds).padStart(2, "0");
-
-  if (time === 0) {
-    clearInterval(countdown);
-    finishExam();
   }
 
-  time--;
+  updateTimer();
 
-}, 1000);
+  const countdown = setInterval(function () {
 
+    timeLeft--;
 
-document.getElementById("examForm").addEventListener("submit", function(event) {
-
-  event.preventDefault();
-
-  finishExam();
-
-});
-
-
-function finishExam() {
-
-  clearInterval(countdown);
-
-  let correct = 0;
-  let total = Object.keys(answers).length;
-
-  for (let question in answers) {
-
-    let selected = document.querySelector(
-      'input[name="' + question + '"]:checked'
-    );
-
-    if (selected && selected.value === answers[question]) {
-      correct++;
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      updateTimer();
+      clearInterval(countdown);
+      finishExam();
+      return;
     }
 
+    updateTimer();
+
+  }, 1000);
+
+
+  form.addEventListener("submit", function (event) {
+
+    event.preventDefault();
+
+    finishExam();
+
+  });
+
+
+  function finishExam() {
+
+    clearInterval(countdown);
+
+    const answers = {
+      q1: "b",
+      q2: "a",
+      q3: "b",
+      q4: "c",
+      q5: "b"
+    };
+
+    let correct = 0;
+    const total = Object.keys(answers).length;
+
+    for (const question in answers) {
+
+      const selected = document.querySelector(
+        'input[name="' + question + '"]:checked'
+      );
+
+      if (selected && selected.value === answers[question]) {
+        correct++;
+      }
+
+    }
+
+    const percentage =
+      Math.round((correct / total) * 100);
+
+    form.style.display = "none";
+    result.style.display = "block";
+
+    document.getElementById("score").textContent =
+      percentage + "%";
+
+    document.getElementById("details").textContent =
+      "Ճիշտ պատասխաններ՝ " +
+      correct +
+      " / " +
+      total;
   }
 
-  let percentage = Math.round((correct / total) * 100);
-
-  document.getElementById("examForm").style.display = "none";
-
-  document.getElementById("result").style.display = "block";
-
-  document.getElementById("score").textContent =
-    percentage + "%";
-
-  document.getElementById("details").textContent =
-    "Ճիշտ պատասխաններ՝ " + correct + " / " + total;
-}
-
+});
 </script>
 
 </body>
