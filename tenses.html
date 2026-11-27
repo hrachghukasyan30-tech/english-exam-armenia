@@ -74,6 +74,8 @@ const SUPABASE_URL = "https://zkmtvzbbaxwlscarstkc.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VWDP871AYiFF0WaE2i03zA_X4P-MB9T";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+const TEST_TYPE = "Tenses";
+
 const questions = [
 {q:"I ___ to school every day.",a:["go","went","am going","have gone"],c:0},
 {q:"She ___ her homework yesterday.",a:["does","did","has done","is doing"],c:1},
@@ -233,7 +235,8 @@ const {error}=await supabase.from("exam_results").insert({
 user_id:user.id,
 score:score,
 correct_answers:correct,
-total_questions:questions.length
+total_questions:questions.length,
+test_type:TEST_TYPE
 });
 
 hide("testCard");
