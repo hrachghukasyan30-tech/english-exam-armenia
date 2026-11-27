@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EnglishExam — Prepositions Test</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f8;color:#17202a}
+header{background:#101828;color:#fff;padding:18px 20px}
+header h1{font-size:22px}
+.container{max-width:900px;margin:28px auto;padding:0 16px}
+.card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 5px 20px rgba(0,0,0,.08)}
+.hidden{display:none}
+#authMsg{text-align:center;padding:28px;font-size:18px}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.badge{background:#eef2ff;color:#3730a3;padding:8px 12px;border-radius:999px;font-weight:700}
+.timer{background:#fff1f2;color:#be123c;padding:8px 12px;border-radius:999px;font-weight:700}
+.progress{height:10px;background:#e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:22px}
+.progressBar{height:100%;width:0;background:#2563eb;transition:.2s}
+.qnum{font-size:14px;color:#667085;margin-bottom:10px}
+.question{font-size:22px;font-weight:700;line-height:1.4;margin-bottom:22px}
+.option{display:block;width:100%;text-align:left;background:#f8fafc;border:2px solid #e5e7eb;border-radius:12px;padding:14px;margin:10px 0;font-size:16px;cursor:pointer}
+.option:hover{border-color:#94a3b8}
+.option.selected{border-color:#2563eb;background:#eff6ff}
+.buttons{display:flex;justify-content:space-between;gap:10px;margin-top:24px;flex-wrap:wrap}
+button{border:0;border-radius:10px;padding:12px 20px;font-size:15px;font-weight:700;cursor:pointer}
+.prev{background:#e5e7eb;color:#17202a}
+.next{background:#2563eb;color:#fff}
+.finish{background:#16a34a;color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+.message{margin-top:14px;color:#b42318}
+.result{text-align:center}
+.score{font-size:42px;font-weight:800;color:#2563eb;margin:12px 0}
+.review{margin-top:25px;text-align:left}
+.review-item{padding:15px;border-radius:12px;background:#f8fafc;margin:10px 0;border-left:5px solid #94a3b8}
+.correct{border-left-color:#16a34a}
+.wrong{border-left-color:#dc2626}
+.small{font-size:14px;color:#667085;margin-top:6px}
+.error{color:#b42318;background:#fef3f2;padding:12px;border-radius:10px;margin-top:15px}
+@media(max-width:600px){
+.container{margin:16px auto;padding:0 10px}
+.card{padding:18px}
+.question{font-size:19px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>📚 EnglishExam — Prepositions Test</h1>
+</header>
+
+<div class="container">
+<div id="authMsg" class="card">Ստուգում ենք մուտքը...</div>
+
+<div id="exam" class="card hidden">
+<div class="top">
+<div class="badge">Prepositions • 40 հարց • 20 միավոր</div>
+<div class="timer" id="timer">60:00</div>
+</div>
+
+<div class="progress"><div class="progressBar" id="progressBar"></div></div>
+<div class="qnum" id="qnum"></div>
+<div class="question" id="question"></div>
+<div id="options"></div>
+
+<div class="buttons">
+<button class="prev" id="prevBtn" onclick="prevQuestion()">← Նախորդ</button>
+<button class="next" id="nextBtn" onclick="nextQuestion()">Հաջորդ →</button>
+<button class="finish hidden" id="finishBtn" onclick="finishExam()">Ավարտել ✓</button>
+</div>
+<div id="message"></div>
+</div>
+
+<div id="result" class="card hidden">
+<div class="result">
+<h2>Թեստն ավարտված է 🎉</h2>
+<div class="score" id="score"></div>
+<div id="resultText"></div>
+</div>
+<div class="review" id="review"></div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://zkmtvzbbaxwlscarstkc.supabase.co";
+const SUPABASE_KEY="sb_publishable_VWDP871AYiFF0WaE2i03zA_X4P-MB9T";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const questions=[
+{q:"I wake up ___ 7 o'clock.",o:["in","on","at","for"],a:2},
+{q:"My birthday is ___ May.",o:["at","in","on","for"],a:1},
+{q:"We have English ___ Monday.",o:["at","in","on","from"],a:2},
+{q:"She has lived here ___ 2021.",o:["for","since","during","at"],a:1},
+{q:"I have studied English ___ three years.",o:["since","for","from","at"],a:1},
+{q:"He is good ___ mathematics.",o:["in","at","on","for"],a:1},
+{q:"They arrived ___ the airport early.",o:["at","on","in","to"],a:0},
+{q:"She is interested ___ music.",o:["on","at","in","for"],a:2},
+{q:"We are waiting ___ the bus.",o:["to","for","at","on"],a:1},
+{q:"He goes ___ school by bus.",o:["at","to","in","on"],a:1},
+{q:"The book is ___ the table.",o:["in","on","at","to"],a:1},
+{q:"There is a picture ___ the wall.",o:["at","on","in","for"],a:1},
+{q:"She is sitting ___ the chair.",o:["in","on","at","to"],a:1},
+{q:"The children are ___ the classroom.",o:["at","in","on","to"],a:1},
+{q:"I will meet you ___ the station.",o:["at","on","in","for"],a:0},
+{q:"He went ___ London last summer.",o:["at","to","in","on"],a:1},
+{q:"We walked ___ the park.",o:["through","at","on","for"],a:0},
+{q:"The cat is hiding ___ the bed.",o:["under","at","on","to"],a:0},
+{q:"The plane flew ___ the clouds.",o:["above","at","on","for"],a:0},
+{q:"She put the keys ___ her bag.",o:["on","at","in","to"],a:2},
+{q:"I am afraid ___ spiders.",o:["from","of","at","on"],a:1},
+{q:"This gift is ___ you.",o:["to","for","at","on"],a:1},
+{q:"He depends ___ his parents.",o:["on","in","at","for"],a:0},
+{q:"She is married ___ a doctor.",o:["with","to","at","for"],a:1},
+{q:"I am looking ___ my keys.",o:["at","for","on","to"],a:1},
+{q:"Please listen ___ the teacher.",o:["at","to","on","for"],a:1},
+{q:"He is waiting ___ his friend.",o:["to","for","at","on"],a:1},
+{q:"We talked ___ the problem.",o:["about","at","to","for"],a:0},
+{q:"She arrived ___ home late.",o:["at","to","in","on"],a:0},
+{q:"They are going ___ vacation next week.",o:["on","at","in","to"],a:0},
+{q:"I was born ___ 2008.",o:["on","at","in","for"],a:2},
+{q:"We met ___ Friday evening.",o:["at","in","on","for"],a:2},
+{q:"He works ___ a hospital.",o:["at","in","on","to"],a:1},
+{q:"She is ___ the bus right now.",o:["on","in","at","to"],a:0},
+{q:"The dog is ___ the house.",o:["outside","at","on","to"],a:0},
+{q:"He walked ___ the bridge.",o:["across","at","on","for"],a:0},
+{q:"The shop is ___ the bank and the school.",o:["between","among","at","on"],a:0},
+{q:"She divided the cake ___ the children.",o:["between","among","at","to"],a:1},
+{q:"He came ___ Armenia last year.",o:["from","at","on","for"],a:0},
+{q:"We stayed there ___ two weeks.",o:["since","for","at","on"],a:1}
+];
+
+let current=0;
+let answers=Array(questions.length).fill(null);
+let seconds=60*60;
+let timerInterval=null;
+let currentUser=null;
+let finished=false;
+
+async function checkAuth(){
+try{
+const {data,error}=await supabaseClient.auth.getUser();
+if(error||!data.user){
+document.getElementById("authMsg").innerHTML="<h3>Մուտք գործիր՝ թեստը սկսելու համար</h3><p style='margin-top:10px;color:#667085'>Վերադարձիր գլխավոր էջ և մուտք գործիր քո հաշիվ։</p>";
+return;
+}
+currentUser=data.user;
+document.getElementById("authMsg").classList.add("hidden");
+document.getElementById("exam").classList.remove("hidden");
+renderQuestion();
+startTimer();
+}catch(e){
+document.getElementById("authMsg").innerHTML="<div class='error'>Մուտքի ստուգման ժամանակ սխալ առաջացավ։</div>";
+}
+}
+
+function renderQuestion(){
+const item=questions[current];
+document.getElementById("qnum").textContent=`Հարց ${current+1} / ${questions.length}`;
+document.getElementById("question").textContent=item.q;
+const options=document.getElementById("options");
+options.innerHTML="";
+item.o.forEach((option,index)=>{
+const btn=document.createElement("button");
+btn.className="option"+(answers[current]===index?" selected":"");
+btn.textContent=String.fromCharCode(65+index)+". "+option;
+btn.onclick=()=>selectAnswer(index);
+options.appendChild(btn);
+});
+document.getElementById("progressBar").style.width=((current+1)/questions.length*100)+"%";
+document.getElementById("prevBtn").disabled=current===0;
+document.getElementById("nextBtn").classList.toggle("hidden",current===questions.length-1);
+document.getElementById("finishBtn").classList.toggle("hidden",current!==questions.length-1);
+document.getElementById("message").textContent="";
+}
+
+function selectAnswer(index){answers[current]=index;renderQuestion();}
+function prevQuestion(){if(current>0){current--;renderQuestion();}}
+function nextQuestion(){
+if(answers[current]===null){document.getElementById("message").textContent="Ընտրիր պատասխան, հետո անցիր հաջորդ հարցին։";return;}
+if(current<questions.length-1){current++;renderQuestion();}
+}
+
+function startTimer(){
+timerInterval=setInterval(()=>{
+seconds--;updateTimer();
+if(seconds<=0){clearInterval(timerInterval);finishExam(true);}
+},1000);
+updateTimer();
+}
+function updateTimer(){
+const m=Math.floor(seconds/60),s=seconds%60;
+document.getElementById("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+async function finishExam(auto=false){
+if(finished)return;
+if(!auto&&answers.some(a=>a===null)){
+document.getElementById("message").textContent="Բոլոր հարցերին պատասխանելուց հետո կարող ես ավարտել թեստը։";
+return;
+}
+finished=true;
+clearInterval(timerInterval);
+
+let correct=0;
+questions.forEach((item,i)=>{if(answers[i]===item.a)correct++;});
+const score=correct*0.5;
+
+document.getElementById("exam").classList.add("hidden");
+document.getElementById("result").classList.remove("hidden");
+document.getElementById("score").textContent=`${score.toFixed(2)} / 20`;
+document.getElementById("resultText").innerHTML=`Ճիշտ պատասխաններ՝ <b>${correct}</b> / ${questions.length}<br><span class="small">${auto?"Ժամանակը լրացավ։":"Թեստը ավարտված է։"}</span>`;
+
+const review=document.getElementById("review");
+review.innerHTML="<h3>Պատասխանների ստուգում</h3>";
+
+questions.forEach((item,i)=>{
+const div=document.createElement("div");
+const ok=answers[i]===item.a;
+div.className="review-item "+(ok?"correct":"wrong");
+const your=answers[i]===null?"Չի պատասխանվել":item.o[answers[i]];
+div.innerHTML=`<b>${i+1}. ${item.q}</b><div class="small">Քո պատասխանը՝ ${your}</div><div class="small">Ճիշտ պատասխանը՝ ${item.o[item.a]}</div>`;
+review.appendChild(div);
+});
+
+try{
+const {error}=await supabaseClient.from("exam_results").insert({
+user_id:currentUser.id,
+score:score,
+correct_answers:correct,
+total_questions:questions.length
+});
+if(error){
+const err=document.createElement("div");
+err.className="error";
+err.textContent="Արդյունքը ցուցադրվեց, բայց Supabase-ում պահպանելու ժամանակ սխալ առաջացավ։";
+review.prepend(err);
+}
+}catch(e){
+const err=document.createElement("div");
+err.className="error";
+err.textContent="Արդյունքը ցուցադրվեց, բայց պահպանման ժամանակ սխալ առաջացավ։";
+review.prepend(err);
+}
+}
+checkAuth();
+</script>
+</body>
+</html>
