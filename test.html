@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EnglishExam — Փորձնական քննություն</title>
+<title>EnglishExam — 80 Հարց</title>
 
 <style>
 * {
@@ -21,14 +21,19 @@ body {
 header {
   background: #111827;
   color: white;
-  padding: 18px 20px;
+  padding: 16px 20px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .logo {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: bold;
 }
 
@@ -37,7 +42,7 @@ header {
   padding: 10px 15px;
   border-radius: 10px;
   font-weight: bold;
-  min-width: 80px;
+  min-width: 82px;
   text-align: center;
 }
 
@@ -47,29 +52,32 @@ header {
   padding: 0 15px;
 }
 
-.info,
-.question,
-#result {
+.info {
   background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.06);
+}
+
+.question {
+  background: white;
+  padding: 20px;
+  margin-bottom: 16px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,.06);
 }
 
-.info {
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.question {
-  padding: 22px;
-  margin-bottom: 18px;
+.question-number {
+  color: #2563eb;
+  font-weight: bold;
 }
 
 .option {
   display: block;
+  background: #f1f5f9;
   padding: 13px;
   margin: 9px 0;
-  background: #f1f5f9;
   border-radius: 9px;
   cursor: pointer;
 }
@@ -82,29 +90,41 @@ header {
   margin-right: 8px;
 }
 
-button {
+.submit {
   width: 100%;
   border: 0;
   background: #2563eb;
   color: white;
   padding: 16px;
-  border-radius: 10px;
+  border-radius: 11px;
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.submit:hover {
+  background: #1d4ed8;
 }
 
 #result {
   display: none;
+  background: white;
   padding: 30px;
+  border-radius: 15px;
   text-align: center;
 }
 
-.score {
-  font-size: 45px;
+.result-score {
+  font-size: 48px;
   font-weight: bold;
   color: #2563eb;
   margin: 15px 0;
+}
+
+.result-info {
+  font-size: 18px;
+  line-height: 1.8;
 }
 
 .back {
@@ -120,141 +140,46 @@ button {
 <body>
 
 <header>
-  <div class="logo">EnglishExam</div>
-  <div class="timer" id="timer">120:00</div>
+
+<div class="logo">
+EnglishExam
+</div>
+
+<div class="timer" id="timer">
+120:00
+</div>
+
 </header>
 
 <div class="container">
 
 <div class="info">
-  <h1>Փորձնական քննություն</h1>
-  <p>⏱ Տևողություն՝ <b>120 րոպե</b></p>
-  <p>Ընտրիր ճիշտ պատասխանը և վերջում սեղմիր կոճակը։</p>
+
+<h1>Փորձնական քննություն</h1>
+
+<p>
+📚 Հարցերի քանակը՝ <b>80</b>
+</p>
+
+<p>
+⏱ Ժամանակը՝ <b>120 րոպե</b>
+</p>
+
+<p>
+⭐ Յուրաքանչյուր ճիշտ պատասխան՝ <b>0.25 միավոր</b>
+</p>
+
+<p>
+🏆 Առավելագույն արդյունք՝ <b>20/20</b>
+</p>
+
 </div>
 
 <form id="examForm">
 
-<div class="question">
-<h3>1. She ___ to school every day.</h3>
+<div id="questions"></div>
 
-<label class="option">
-<input type="radio" name="q1" value="a">
-A) go
-</label>
-
-<label class="option">
-<input type="radio" name="q1" value="b">
-B) goes
-</label>
-
-<label class="option">
-<input type="radio" name="q1" value="c">
-C) going
-</label>
-
-<label class="option">
-<input type="radio" name="q1" value="d">
-D) gone
-</label>
-</div>
-
-<div class="question">
-<h3>2. I ___ this movie before.</h3>
-
-<label class="option">
-<input type="radio" name="q2" value="a">
-A) have seen
-</label>
-
-<label class="option">
-<input type="radio" name="q2" value="b">
-B) has seen
-</label>
-
-<label class="option">
-<input type="radio" name="q2" value="c">
-C) seeing
-</label>
-
-<label class="option">
-<input type="radio" name="q2" value="d">
-D) sawed
-</label>
-</div>
-
-<div class="question">
-<h3>3. If I ___ more time, I would travel more.</h3>
-
-<label class="option">
-<input type="radio" name="q3" value="a">
-A) have
-</label>
-
-<label class="option">
-<input type="radio" name="q3" value="b">
-B) had
-</label>
-
-<label class="option">
-<input type="radio" name="q3" value="c">
-C) will have
-</label>
-
-<label class="option">
-<input type="radio" name="q3" value="d">
-D) having
-</label>
-</div>
-
-<div class="question">
-<h3>4. He is good ___ mathematics.</h3>
-
-<label class="option">
-<input type="radio" name="q4" value="a">
-A) in
-</label>
-
-<label class="option">
-<input type="radio" name="q4" value="b">
-B) on
-</label>
-
-<label class="option">
-<input type="radio" name="q4" value="c">
-C) at
-</label>
-
-<label class="option">
-<input type="radio" name="q4" value="d">
-D) for
-</label>
-</div>
-
-<div class="question">
-<h3>5. They ___ football when it started raining.</h3>
-
-<label class="option">
-<input type="radio" name="q5" value="a">
-A) played
-</label>
-
-<label class="option">
-<input type="radio" name="q5" value="b">
-B) were playing
-</label>
-
-<label class="option">
-<input type="radio" name="q5" value="c">
-C) are playing
-</label>
-
-<label class="option">
-<input type="radio" name="q5" value="d">
-D) have played
-</label>
-</div>
-
-<button type="submit">
+<button type="submit" class="submit">
 Ավարտել քննությունը
 </button>
 
@@ -264,11 +189,13 @@ D) have played
 
 <h2>Քննությունն ավարտված է 🎉</h2>
 
-<div class="score" id="score">0%</div>
+<div class="result-score" id="score">
+0/20
+</div>
 
-<p id="details"></p>
+<div class="result-info" id="details"></div>
 
-<a class="back" href="index.html">
+<a href="index.html" class="back">
 ← Վերադառնալ գլխավոր էջ
 </a>
 
@@ -277,99 +204,174 @@ D) have played
 </div>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
-  const timer = document.getElementById("timer");
-  const form = document.getElementById("examForm");
-  const result = document.getElementById("result");
+const questionsContainer =
+document.getElementById("questions");
 
-  let timeLeft = 120 * 60;
 
-  function updateTimer() {
+/*
+  Այստեղ են հարցերը։
 
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
+  answer = ճիշտ պատասխանի տառը։
+*/
 
-    timer.textContent =
-      minutes.toString().padStart(2, "0") +
-      ":" +
-      seconds.toString().padStart(2, "0");
+const questions = [
 
-  }
+{
+q: "She ___ to school every day.",
+a: ["go", "goes", "going", "gone"],
+answer: "b"
+},
 
-  updateTimer();
+{
+q: "I ___ this movie before.",
+a: ["have seen", "has seen", "seeing", "saw"],
+answer: "a"
+},
 
-  const countdown = setInterval(function () {
+{
+q: "If I ___ more time, I would travel more.",
+a: ["have", "had", "will have", "having"],
+answer: "b"
+},
 
-    timeLeft--;
+{
+q: "He is good ___ mathematics.",
+a: ["in", "on", "at", "for"],
+answer: "c"
+},
 
-    if (timeLeft <= 0) {
-      timeLeft = 0;
-      updateTimer();
-      clearInterval(countdown);
-      finishExam();
-      return;
-    }
+{
+q: "They ___ football when it started raining.",
+a: ["played", "were playing", "are playing", "have played"],
+answer: "b"
+}
+
+];
+
+
+/*
+  Մինչև 80 հարցը լրացնելը,
+  համակարգը ստեղծում է մնացած հարցերը
+  ժամանակավորապես։
+*/
+
+while (questions.length < 80) {
+
+  let number = questions.length + 1;
+
+  questions.push({
+    q: "Practice question " + number,
+    a: [
+      "Answer A",
+      "Answer B",
+      "Answer C",
+      "Answer D"
+    ],
+    answer: "a"
+  });
+
+}
+
+
+/* Ստեղծում ենք 80 հարցը */
+
+questions.forEach(function (item, index) {
+
+  const number = index + 1;
+
+  const div = document.createElement("div");
+
+  div.className = "question";
+
+  div.innerHTML = `
+
+    <div class="question-number">
+      Հարց ${number} / 80
+    </div>
+
+    <h3>${item.q}</h3>
+
+    <label class="option">
+      <input type="radio"
+             name="q${number}"
+             value="a">
+      A) ${item.a[0]}
+    </label>
+
+    <label class="option">
+      <input type="radio"
+             name="q${number}"
+             value="b">
+      B) ${item.a[1]}
+    </label>
+
+    <label class="option">
+      <input type="radio"
+             name="q${number}"
+             value="c">
+      C) ${item.a[2]}
+    </label>
+
+    <label class="option">
+      <input type="radio"
+             name="q${number}"
+             value="d">
+      D) ${item.a[3]}
+    </label>
+
+  `;
+
+  questionsContainer.appendChild(div);
+
+});
+
+
+/* 120 րոպե */
+
+let timeLeft = 120 * 60;
+
+const timer =
+document.getElementById("timer");
+
+
+function updateTimer() {
+
+  let minutes =
+  Math.floor(timeLeft / 60);
+
+  let seconds =
+  timeLeft % 60;
+
+  timer.textContent =
+    String(minutes).padStart(2, "0")
+    + ":" +
+    String(seconds).padStart(2, "0");
+
+}
+
+
+updateTimer();
+
+
+const countdown =
+setInterval(function () {
+
+  timeLeft--;
+
+  if (timeLeft <= 0) {
+
+    timeLeft = 0;
 
     updateTimer();
 
-  }, 1000);
-
-
-  form.addEventListener("submit", function (event) {
-
-    event.preventDefault();
+    clearInterval(countdown);
 
     finishExam();
 
-  });
-
-
-  function finishExam() {
-
-    clearInterval(countdown);
-
-    const answers = {
-      q1: "b",
-      q2: "a",
-      q3: "b",
-      q4: "c",
-      q5: "b"
-    };
-
-    let correct = 0;
-    const total = Object.keys(answers).length;
-
-    for (const question in answers) {
-
-      const selected = document.querySelector(
-        'input[name="' + question + '"]:checked'
-      );
-
-      if (selected && selected.value === answers[question]) {
-        correct++;
-      }
-
-    }
-
-    const percentage =
-      Math.round((correct / total) * 100);
-
-    form.style.display = "none";
-    result.style.display = "block";
-
-    document.getElementById("score").textContent =
-      percentage + "%";
-
-    document.getElementById("details").textContent =
-      "Ճիշտ պատասխաններ՝ " +
-      correct +
-      " / " +
-      total;
+    return;
   }
 
-});
-</script>
-
-</body>
-</html>
+  update
