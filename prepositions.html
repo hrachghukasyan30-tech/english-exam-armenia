@@ -89,6 +89,8 @@ const SUPABASE_URL="https://zkmtvzbbaxwlscarstkc.supabase.co";
 const SUPABASE_KEY="sb_publishable_VWDP871AYiFF0WaE2i03zA_X4P-MB9T";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
+const TEST_TYPE="Prepositions";
+
 const questions=[
 {q:"I wake up ___ 7 o'clock.",o:["in","on","at","for"],a:2},
 {q:"My birthday is ___ May.",o:["at","in","on","for"],a:1},
@@ -230,7 +232,8 @@ const {error}=await supabaseClient.from("exam_results").insert({
 user_id:currentUser.id,
 score:score,
 correct_answers:correct,
-total_questions:questions.length
+total_questions:questions.length,
+test_type:TEST_TYPE
 });
 if(error){
 const err=document.createElement("div");
