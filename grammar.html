@@ -30,52 +30,29 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </style>
 </head>
 <body>
-
-<header>
-  <div class="logo">EnglishExam</div>
-  <div class="timer" id="timer">60:00</div>
-</header>
-
+<header><div class="logo">EnglishExam</div><div class="timer" id="timer">60:00</div></header>
 <div class="container">
-  <div id="loading" class="card loading">Ստուգվում է մուտքը...</div>
-
-  <div id="testCard" class="card hidden">
-    <div class="info">
-      <span>📘 Grammar Test</span>
-      <span id="counter">Հարց 1 / 40</span>
-      <span>🎯 20 միավոր</span>
-    </div>
-
-    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
-
-    <div class="question" id="question"></div>
-    <div id="options"></div>
-
-    <div class="nav">
-      <button class="secondary" id="prevBtn" onclick="previousQuestion()">← Նախորդ</button>
-      <button class="primary" id="nextBtn" onclick="nextQuestion()">Հաջորդ →</button>
-    </div>
-  </div>
-
-  <div id="resultCard" class="card result hidden">
-    <h2>Grammar Test — Արդյունք</h2>
-    <div class="score" id="finalScore">0 / 20</div>
-    <p id="resultText"></p>
-    <div class="review" id="review"></div>
-    <div style="margin-top:25px">
-      <a href="index.html"><button class="primary">← Վերադառնալ գլխավոր էջ</button></a>
-    </div>
-  </div>
+<div id="loading" class="card loading">Ստուգվում է մուտքը...</div>
+<div id="testCard" class="card hidden">
+<div class="info"><span>📘 Grammar Test</span><span id="counter">Հարց 1 / 40</span><span>🎯 20 միավոր</span></div>
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="question" id="question"></div><div id="options"></div>
+<div class="nav"><button class="secondary" id="prevBtn" onclick="previousQuestion()">← Նախորդ</button><button class="primary" id="nextBtn" onclick="nextQuestion()">Հաջորդ →</button></div>
 </div>
-
+<div id="resultCard" class="card result hidden">
+<h2>Grammar Test — Արդյունք</h2><div class="score" id="finalScore">0 / 20</div><p id="resultText"></p>
+<div class="review" id="review"></div>
+<div style="margin-top:25px"><a href="index.html"><button class="primary">← Վերադառնալ գլխավոր էջ</button></a></div>
+</div>
+</div>
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+const SUPABASE_URL="https://zkmtvzbbaxwlscarstkc.supabase.co";
+const SUPABASE_KEY="sb_publishable_VWDP871AYiFF0WaE2i03zA_X4P-MB9T";
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
+const TEST_TYPE="Grammar";
 
-const SUPABASE_URL = "https://zkmtvzbbaxwlscarstkc.supabase.co";
-const SUPABASE_KEY = "sb_publishable_VWDP871AYiFF0WaE2i03z_A4P-MB9T";
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const questions = [
+const questions=[
 {q:"She ___ to school every day.",a:["go","goes","going","gone"],c:1},
 {q:"They ___ football yesterday.",a:["play","played","playing","plays"],c:1},
 {q:"I ___ my homework now.",a:["do","did","am doing","have done"],c:2},
@@ -118,101 +95,35 @@ const questions = [
 {q:"She ___ her homework yet.",a:["didn't finish","hasn't finished","doesn't finished","not finished"],c:1}
 ];
 
-let current=0;
-let answers=Array(questions.length).fill(null);
-let seconds=3600;
-let timerInterval=null;
-let user=null;
-let finished=false;
-
+let current=0,answers=Array(questions.length).fill(null),seconds=3600,timerInterval=null,user=null,finished=false;
 function show(id){document.getElementById(id).classList.remove("hidden")}
 function hide(id){document.getElementById(id).classList.add("hidden")}
 
 async function init(){
-  const {data:{session}}=await supabase.auth.getSession();
-  if(!session){
-    document.getElementById("loading").innerHTML =
-      'Պետք է մուտք գործես։ <br><br><a href="index.html"><button class="primary">Մուտք / Գրանցում</button></a>';
-    return;
-  }
-  user=session.user;
-  hide("loading");
-  show("testCard");
-  renderQuestion();
-  timerInterval=setInterval(updateTimer,1000);
+ const {data:{session}}=await supabase.auth.getSession();
+ if(!session){document.getElementById("loading").innerHTML='Պետք է մուտք գործես։ <br><br><a href="index.html"><button class="primary">Մուտք / Գրանցում</button></a>';return}
+ user=session.user;hide("loading");show("testCard");renderQuestion();timerInterval=setInterval(updateTimer,1000)
 }
-
 function renderQuestion(){
-  const q=questions[current];
-  document.getElementById("counter").textContent=`Հարց ${current+1} / ${questions.length}`;
-  document.getElementById("question").textContent=q.q;
-  const box=document.getElementById("options");
-  box.innerHTML="";
-  q.a.forEach((option,i)=>{
-    const b=document.createElement("button");
-    b.className="option"+(answers[current]===i?" selected":"");
-    b.textContent=`${String.fromCharCode(65+i)}. ${option}`;
-    b.onclick=()=>selectAnswer(i);
-    box.appendChild(b);
-  });
-  document.getElementById("prevBtn").disabled=current===0;
-  document.getElementById("nextBtn").textContent=current===questions.length-1?"Ավարտել ✓":"Հաջորդ →";
-  document.getElementById("progressBar").style.width=((current+1)/questions.length*100)+"%";
+ const q=questions[current];document.getElementById("counter").textContent=`Հարց ${current+1} / ${questions.length}`;document.getElementById("question").textContent=q.q;
+ const box=document.getElementById("options");box.innerHTML="";
+ q.a.forEach((option,i)=>{const b=document.createElement("button");b.className="option"+(answers[current]===i?" selected":"");b.textContent=`${String.fromCharCode(65+i)}. ${option}`;b.onclick=()=>selectAnswer(i);box.appendChild(b)});
+ document.getElementById("prevBtn").disabled=current===0;document.getElementById("nextBtn").textContent=current===questions.length-1?"Ավարտել ✓":"Հաջորդ →";document.getElementById("progressBar").style.width=((current+1)/questions.length*100)+"%"
 }
-
 function selectAnswer(i){answers[current]=i;renderQuestion()}
-
 window.previousQuestion=()=>{if(current>0){current--;renderQuestion()}}
-window.nextQuestion=()=>{
-  if(answers[current]===null){
-    alert("Ընտրիր պատասխան։");
-    return;
-  }
-  if(current<questions.length-1){current++;renderQuestion()}
-  else finishTest();
-}
-
-function updateTimer(){
-  seconds--;
-  if(seconds<0){finishTest();return}
-  const m=Math.floor(seconds/60), s=seconds%60;
-  document.getElementById("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-  if(seconds<=60)document.getElementById("timer").style.color="#fca5a5";
-}
+window.nextQuestion=()=>{if(answers[current]===null){alert("Ընտրիր պատասխան։");return}if(current<questions.length-1){current++;renderQuestion()}else finishTest()}
+function updateTimer(){seconds--;if(seconds<0){finishTest();return}const m=Math.floor(seconds/60),s=seconds%60;document.getElementById("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;if(seconds<=60)document.getElementById("timer").style.color="#fca5a5"}
 
 async function finishTest(){
-  if(finished)return;
-  finished=true;
-  clearInterval(timerInterval);
-  let correct=0;
-  questions.forEach((q,i)=>{if(answers[i]===q.c)correct++});
-  const score=correct*0.5;
-
-  const {error}=await supabase.from("exam_results").insert({
-    user_id:user.id,
-    score:score,
-    correct_answers:correct,
-    total_questions:questions.length
-  });
-
-  hide("testCard");
-  show("resultCard");
-  document.getElementById("finalScore").textContent=`${score} / 20`;
-  document.getElementById("resultText").textContent=`Ճիշտ պատասխաններ՝ ${correct} / ${questions.length}`;
-  const review=document.getElementById("review");
-  review.innerHTML="";
-  questions.forEach((q,i)=>{
-    const div=document.createElement("div");
-    div.className="review-item";
-    const ok=answers[i]===q.c;
-    div.innerHTML=`<b>${i+1}. ${q.q}</b><br>
-      Քո պատասխանը՝ <span class="${ok?'correct':'wrong'}">${answers[i]===null?'Չի ընտրվել':q.a[answers[i]]}</span><br>
-      Ճիշտ պատասխանը՝ <span class="correct">${q.a[q.c]}</span>`;
-    review.appendChild(div);
-  });
-  if(error) console.error("Supabase save error:",error);
+ if(finished)return;finished=true;clearInterval(timerInterval);
+ let correct=0;questions.forEach((q,i)=>{if(answers[i]===q.c)correct++});const score=correct*0.5;
+ const {error}=await supabase.from("exam_results").insert({user_id:user.id,score:score,correct_answers:correct,total_questions:questions.length,test_type:TEST_TYPE});
+ hide("testCard");show("resultCard");document.getElementById("finalScore").textContent=`${score} / 20`;document.getElementById("resultText").textContent=`Ճիշտ պատասխաններ՝ ${correct} / ${questions.length}`;
+ const review=document.getElementById("review");review.innerHTML="";
+ questions.forEach((q,i)=>{const div=document.createElement("div");div.className="review-item";const ok=answers[i]===q.c;div.innerHTML=`<b>${i+1}. ${q.q}</b><br>Քո պատասխանը՝ <span class="${ok?'correct':'wrong'}">${answers[i]===null?'Չի ընտրվել':q.a[answers[i]]}</span><br>Ճիշտ պատասխանը՝ <span class="correct">${q.a[q.c]}</span>`;review.appendChild(div)});
+ if(error)console.error("Supabase save error:",error)
 }
-
 init();
 </script>
 </body>
