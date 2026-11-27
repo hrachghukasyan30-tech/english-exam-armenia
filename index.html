@@ -1,291 +1,74 @@
+
 <!DOCTYPE html>
 <html lang="hy">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>English Exam Armenia</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+header{background:#101828;color:white;padding:18px 22px}
+.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:23px;font-weight:900}
+.logo span{color:#3b82f6}
+.menu{display:flex;gap:22px}
+.menu a{color:#d0d5dd;text-decoration:none;font-size:14px}
+.hero{background:linear-gradient(135deg,#111827,#1e3a8a);color:white;padding:70px 20px}
+.hero-content{max-width:1100px;margin:auto}
+.badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:8px 14px;border-radius:50px;font-size:13px;margin-bottom:20px}
+.hero h1{font-size:43px;max-width:700px;line-height:1.12;margin-bottom:18px}
+.hero p{color:#d0d5dd;max-width:650px;line-height:1.7;margin-bottom:28px}
+.main-btn{display:inline-block;background:#2563eb;color:white;text-decoration:none;padding:15px 25px;border-radius:12px;font-weight:800;border:0;cursor:pointer}
+.stats{max-width:1100px;margin:-35px auto 0;padding:0 20px;position:relative}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.stat{background:white;border-radius:17px;padding:25px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.stat-icon{font-size:25px;margin-bottom:8px}
+.stat h3{font-size:22px;margin-bottom:5px}
+.stat p{color:#667085;font-size:14px}
+section{max-width:1100px;margin:auto;padding:65px 20px}
+.section-title{text-align:center;margin-bottom:35px}
+.section-title h2{font-size:30px;margin-bottom:10px}
+.section-title p{color:#667085}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature{background:white;border-radius:18px;padding:28px;border:1px solid #eaecf0;transition:.2s}
+.feature:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.feature-icon{width:50px;height:50px;border-radius:14px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:23px;margin-bottom:18px}
+.feature h3{margin-bottom:10px}
+.feature p{color:#667085;line-height:1.6}
+.test-section{background:#eef4ff;max-width:none}
+.test-content{max-width:1100px;margin:auto;padding:0 20px}
+.test-card{background:white;border-radius:22px;padding:35px;display:flex;justify-content:space-between;align-items:center;gap:30px;box-shadow:0 10px 35px rgba(0,0,0,.07)}
+.test-card h2{margin-bottom:12px}
+.test-card p{color:#667085;line-height:1.6}
+.test-info{display:flex;gap:25px;margin-top:20px;flex-wrap:wrap}
+.test-info span{color:#475467;font-size:14px}
+footer{background:#101828;color:#98a2b3;text-align:center;padding:28px 20px;font-size:13px}
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f7fb;
-  color: #172033;
-}
-
-/* HEADER */
-
-header {
-  background: #101828;
-  color: white;
-  padding: 18px 22px;
-}
-
-.nav {
-  max-width: 1100px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo {
-  font-size: 23px;
-  font-weight: 900;
-}
-
-.logo span {
-  color: #3b82f6;
-}
-
-.menu {
-  display: flex;
-  gap: 22px;
-}
-
-.menu a {
-  color: #d0d5dd;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-/* HERO */
-
-.hero {
-  background:
-    linear-gradient(135deg, #111827 0%, #1e3a8a 100%);
-
-  color: white;
-  padding: 70px 20px;
-}
-
-.hero-content {
-  max-width: 1100px;
-  margin: auto;
-}
-
-.badge {
-  display: inline-block;
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.2);
-  padding: 8px 14px;
-  border-radius: 50px;
-  font-size: 13px;
-  margin-bottom: 20px;
-}
-
-.hero h1 {
-  font-size: 43px;
-  max-width: 700px;
-  line-height: 1.12;
-  margin-bottom: 18px;
-}
-
-.hero p {
-  color: #d0d5dd;
-  max-width: 650px;
-  line-height: 1.7;
-  margin-bottom: 28px;
-}
-
-.main-btn {
-  display: inline-block;
-  background: #2563eb;
-  color: white;
-  text-decoration: none;
-  padding: 15px 25px;
-  border-radius: 12px;
-  font-weight: 800;
-}
-
-/* STATS */
-
-.stats {
-  max-width: 1100px;
-  margin: -35px auto 0;
-  padding: 0 20px;
-  position: relative;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
-
-.stat {
-  background: white;
-  border-radius: 17px;
-  padding: 25px;
-  text-align: center;
-  box-shadow: 0 8px 30px rgba(0,0,0,.08);
-}
-
-.stat-icon {
-  font-size: 25px;
-  margin-bottom: 8px;
-}
-
-.stat h3 {
-  font-size: 22px;
-  margin-bottom: 5px;
-}
-
-.stat p {
-  color: #667085;
-  font-size: 14px;
-}
-
-/* FEATURES */
-
-section {
-  max-width: 1100px;
-  margin: auto;
-  padding: 65px 20px;
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: 35px;
-}
-
-.section-title h2 {
-  font-size: 30px;
-  margin-bottom: 10px;
-}
-
-.section-title p {
-  color: #667085;
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.feature {
-  background: white;
-  border-radius: 18px;
-  padding: 28px;
-  border: 1px solid #eaecf0;
-  transition: .2s;
-}
-
-.feature:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.08);
-}
-
-.feature-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
-  background: #eff6ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 23px;
-  margin-bottom: 18px;
-}
-
-.feature h3 {
-  margin-bottom: 10px;
-}
-
-.feature p {
-  color: #667085;
-  line-height: 1.6;
-}
-
-/* TEST CARD */
-
-.test-section {
-  background: #eef4ff;
-  max-width: none;
-}
-
-.test-content {
-  max-width: 1100px;
-  margin: auto;
-  padding: 0 20px;
-}
-
-.test-card {
-  background: white;
-  border-radius: 22px;
-  padding: 35px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 30px;
-  box-shadow: 0 10px 35px rgba(0,0,0,.07);
-}
-
-.test-card h2 {
-  margin-bottom: 12px;
-}
-
-.test-card p {
-  color: #667085;
-  line-height: 1.6;
-}
-
-.test-info {
-  display: flex;
-  gap: 25px;
-  margin-top: 20px;
-}
-
-.test-info span {
-  color: #475467;
-  font-size: 14px;
-}
-
-/* FOOTER */
-
-footer {
-  background: #101828;
-  color: #98a2b3;
-  text-align: center;
-  padding: 28px 20px;
-  font-size: 13px;
-}
-
-@media(max-width: 750px) {
-
-  .menu {
-    display: none;
-  }
-
-  .hero {
-    padding: 50px 20px;
-  }
-
-  .hero h1 {
-    font-size: 31px;
-  }
-
-  .stats-grid,
-  .features {
-    grid-template-columns: 1fr;
-  }
-
-  .test-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .test-card .main-btn {
-    width: 100%;
-    text-align: center;
-  }
+/* ACCOUNT */
+.account-section{max-width:750px}
+.account-card{background:white;border:1px solid #eaecf0;border-radius:20px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.05)}
+.account-card h2{margin-bottom:12px}
+.account-card p{color:#667085;line-height:1.6}
+.account-form{display:grid;gap:12px;margin-top:20px}
+.account-form input{width:100%;padding:14px;border:1px solid #d0d5dd;border-radius:10px;font-size:15px}
+.account-buttons{display:flex;gap:10px;flex-wrap:wrap}
+.account-buttons button{flex:1;min-width:130px}
+.secondary-btn{background:#eef2ff;color:#1d4ed8;padding:14px;border:0;border-radius:10px;font-weight:bold;cursor:pointer}
+#message{margin-top:15px;font-size:14px;line-height:1.5}
+#dashboard{display:none;margin-top:22px}
+.result-item{padding:15px;border:1px solid #eaecf0;border-radius:12px;margin-top:10px}
+.result-item strong{color:#1d4ed8}
+.small-btn{background:#e5e7eb;color:#172033;padding:10px 15px;border:0;border-radius:9px;cursor:pointer;font-weight:bold}
+@media(max-width:750px){
+.menu{display:none}
+.hero{padding:50px 20px}
+.hero h1{font-size:31px}
+.stats-grid,.features{grid-template-columns:1fr}
+.test-card{flex-direction:column;align-items:flex-start}
+.test-card .main-btn{width:100%;text-align:center}
+.account-buttons{flex-direction:column}
 }
 </style>
 </head>
@@ -293,195 +76,299 @@ footer {
 <body>
 
 <header>
-
 <div class="nav">
-
-<div class="logo">
-English<span>Exam</span>
-</div>
-
+<div class="logo">English<span>Exam</span></div>
 <div class="menu">
 <a href="#">Գլխավոր</a>
 <a href="#features">Հնարավորություններ</a>
 <a href="#test">Թեստ</a>
+<a href="#account">Իմ հաշիվը</a>
 </div>
-
 </div>
-
 </header>
 
-
-<!-- HERO -->
-
 <div class="hero">
-
 <div class="hero-content">
-
-<div class="badge">
-🇦🇲 Անգլերենի միասնական քննության պատրաստում
+<div class="badge">🇦🇲 Անգլերենի միասնական քննության պատրաստում</div>
+<h1>Պատրաստվիր քննությանը ավելի վստահ</h1>
+<p>Փորձիր իրական քննությանը մոտ ձևաչափով թեստեր, ստուգիր գիտելիքներդ և տես քո արդյունքները մեկ հարթակում։</p>
+<a href="#test" class="main-btn">Սկսել փորձնական քննությունը →</a>
 </div>
-
-<h1>
-Պատրաստվիր քննությանը ավելի վստահ
-</h1>
-
-<p>
-Փորձիր իրական քննությանը մոտ ձևաչափով թեստեր,
-ստուգիր գիտելիքներդ և տես քո արդյունքները մեկ հարթակում։
-</p>
-
-<a href="#test" class="main-btn">
-Սկսել փորձնական քննությունը →
-</a>
-
 </div>
-
-</div>
-
-
-<!-- STATS -->
 
 <div class="stats">
-
 <div class="stats-grid">
-
 <div class="stat">
 <div class="stat-icon">📝</div>
 <h3>Փորձնական թեստեր</h3>
 <p>Քննությանը մոտ ձևաչափ</p>
 </div>
-
 <div class="stat">
 <div class="stat-icon">⏱️</div>
 <h3>120 րոպե</h3>
 <p>Ժամանակաչափով քննություն</p>
 </div>
-
 <div class="stat">
 <div class="stat-icon">📊</div>
 <h3>Ավտոմատ արդյունք</h3>
 <p>Տես արդյունքդ անմիջապես</p>
 </div>
-
 </div>
-
 </div>
-
-
-<!-- FEATURES -->
 
 <section id="features">
-
 <div class="section-title">
-
 <h2>Ինչ կարող ես անել այստեղ</h2>
-
-<p>
-Ամեն ինչ մեկ հարթակում՝ քննությանը պատրաստվելու համար։
-</p>
-
+<p>Ամեն ինչ մեկ հարթակում՝ քննությանը պատրաստվելու համար։</p>
 </div>
-
-
 <div class="features">
-
 <div class="feature">
-
 <div class="feature-icon">🎯</div>
-
 <h3>Փորձնական քննություն</h3>
-
-<p>
-Անցիր ամբողջական փորձնական քննություն
-ժամանակաչափով և ստուգիր պատրաստվածությունդ։
-</p>
-
+<p>Անցիր ամբողջական փորձնական քննություն ժամանակաչափով և ստուգիր պատրաստվածությունդ։</p>
 </div>
-
-
 <div class="feature">
-
 <div class="feature-icon">📚</div>
-
 <h3>Պարապել ըստ թեմաների</h3>
-
-<p>
-Հետագայում կարող ես ընտրել կոնկրետ թեմա
-և աշխատել հենց քո թույլ կողմերի վրա։
-</p>
-
+<p>Ընտրիր կոնկրետ թեմա և աշխատիր հենց քո թույլ կողմերի վրա։</p>
 </div>
-
-
 <div class="feature">
-
 <div class="feature-icon">📈</div>
-
 <h3>Հետևիր առաջընթացիդ</h3>
-
-<p>
-Պահպանիր արդյունքներդ և հետևիր,
-թե ինչպես է փոխվում քո պատրաստվածությունը։
-</p>
-
+<p>Պահպանիր արդյունքներդ և հետևիր քո առաջընթացին։</p>
 </div>
-
 </div>
-
 </section>
 
+<!-- ACCOUNT -->
+<section class="account-section" id="account">
+<div class="account-card">
+<h2>👤 Անձնական հաշիվ</h2>
+<p id="accountIntro">Գրանցվիր կամ մուտք գործիր՝ քննությունների արդյունքները պահպանելու համար։</p>
 
-<!-- TEST -->
+<div id="authArea" class="account-form">
+<input id="email" type="email" placeholder="Էլ․ փոստ" autocomplete="email">
+<input id="password" type="password" placeholder="Գաղտնաբառ" autocomplete="current-password">
+<div class="account-buttons">
+<button class="main-btn" id="signupBtn">Գրանցվել</button>
+<button class="secondary-btn" id="loginBtn">Մուտք գործել</button>
+</div>
+</div>
+
+<p id="message" role="status"></p>
+
+<div id="dashboard">
+<p><strong id="userEmail"></strong></p>
+<h3 style="margin-top:20px">Իմ քննությունների արդյունքները</h3>
+<div id="history"><p>Բեռնվում է...</p></div>
+<button class="small-btn" id="logoutBtn" style="margin-top:18px">Դուրս գալ</button>
+</div>
+</div>
+</section>
 
 <div class="test-section" id="test">
-
 <div class="test-content">
-
 <section style="padding-left:0;padding-right:0">
-
 <div class="test-card">
-
 <div>
-
-<h2>
-Պատրա՞ստ ես փորձել
-</h2>
-
-<p>
-Սկսիր 120 րոպեանոց փորձնական քննությունը
-և ստուգիր քո գիտելիքները։
-</p>
-
+<h2>Պատրա՞ստ ես փորձել</h2>
+<p>Սկսիր 120 րոպեանոց փորձնական քննությունը և ստուգիր քո գիտելիքները։</p>
 <div class="test-info">
-
 <span>⏱️ 120 րոպե</span>
-
 <span>📝 Թեստային հարցեր</span>
-
 <span>📊 Արդյունք</span>
-
 </div>
-
 </div>
-
-<a href="test.html" class="main-btn">
-Սկսել թեստը
-</a>
-
+<a href="test.html" class="main-btn" id="startTest">Սկսել թեստը</a>
 </div>
-
 </section>
-
 </div>
-
 </div>
-
 
 <footer>
-
 © 2026 EnglishExam — Անգլերենի քննության պատրաստման հարթակ
-
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://zkmtvzbbaxwlscarstkc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VWDP871AYiFF0WaE2i03zA_X4P-MB9T";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const message = document.getElementById("message");
+const authArea = document.getElementById("authArea");
+const dashboard = document.getElementById("dashboard");
+const historyArea = document.getElementById("history");
+
+function showMessage(text, color = "#344054") {
+  message.textContent = text;
+  message.style.color = color;
+}
+
+async function loadHistory(user) {
+  historyArea.innerHTML = "<p>Բեռնվում է...</p>";
+
+  const { data, error } = await supabaseClient
+    .from("exam_results")
+    .select("score, correct_answers, total_questions, completed_at")
+    .eq("user_id", user.id)
+    .order("completed_at", { ascending: false });
+
+  if (error) {
+    historyArea.textContent = "Արդյունքները բեռնել չհաջողվեց։ " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    historyArea.innerHTML = "<p>Դեռ պահպանված քննության արդյունքներ չկան։</p>";
+    return;
+  }
+
+  historyArea.innerHTML = "";
+
+  data.forEach(result => {
+    const item = document.createElement("div");
+    item.className = "result-item";
+
+    const date = new Date(result.completed_at).toLocaleString("hy-AM");
+
+    const heading = document.createElement("strong");
+    heading.textContent = "Արդյունք՝ " + result.score + " / 20";
+
+    const details = document.createElement("p");
+    details.textContent =
+      "Ճիշտ պատասխաններ՝ " + result.correct_answers +
+      " / " + result.total_questions;
+
+    const dateText = document.createElement("p");
+    dateText.textContent = "Ամսաթիվ՝ " + date;
+
+    item.append(heading, details, dateText);
+    historyArea.appendChild(item);
+  });
+}
+
+async function updateAccount() {
+  const { data } = await supabaseClient.auth.getSession();
+  const user = data.session?.user;
+
+  if (user) {
+    authArea.style.display = "none";
+    dashboard.style.display = "block";
+    document.getElementById("userEmail").textContent = user.email;
+    document.getElementById("accountIntro").textContent =
+      "Բարի գալուստ քո անձնական էջ։";
+    await loadHistory(user);
+  } else {
+    authArea.style.display = "grid";
+    dashboard.style.display = "none";
+    document.getElementById("accountIntro").textContent =
+      "Գրանցվիր կամ մուտք գործիր՝ քննությունների արդյունքները պահպանելու համար։";
+  }
+}
+
+document.getElementById("signupBtn").addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    showMessage("Լրացրու էլ․ փոստը և գաղտնաբառը։", "red");
+    return;
+  }
+
+  if (password.length < 6) {
+    showMessage("Գաղտնաբառը պետք է ունենա առնվազն 6 նիշ։", "red");
+    return;
+  }
+
+  showMessage("Գրանցումը կատարվում է...");
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: window.location.origin + window.location.pathname
+    }
+  });
+
+  if (error) {
+    showMessage(error.message, "red");
+    return;
+  }
+
+  if (data.session) {
+    showMessage("Գրանցումը հաջողվեց։", "green");
+    await updateAccount();
+  } else {
+    showMessage(
+      "Գրանցումը կատարվեց։ Ստուգիր էլ․ փոստդ և հաստատիր հաշիվդ։",
+      "green"
+    );
+  }
+});
+
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    showMessage("Լրացրու էլ․ փոստը և գաղտնաբառը։", "red");
+    return;
+  }
+
+  showMessage("Մուտք է կատարվում...");
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    showMessage(error.message, "red");
+    return;
+  }
+
+  showMessage("Հաջողությամբ մուտք գործեցիր։", "green");
+  await updateAccount();
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    showMessage(error.message, "red");
+    return;
+  }
+
+  showMessage("Դուրս եկար հաշվից։");
+  await updateAccount();
+});
+
+document.getElementById("startTest").addEventListener("click", async (event) => {
+  const { data } = await supabaseClient.auth.getSession();
+
+  if (!data.session) {
+    event.preventDefault();
+    showMessage("Թեստը սկսելու համար նախ մուտք գործիր կամ գրանցվիր։", "red");
+    document.getElementById("account").scrollIntoView({
+      behavior: "smooth"
+    });
+  }
+});
+
+supabaseClient.auth.onAuthStateChange(() => {
+  updateAccount();
+});
+
+updateAccount();
+</script>
 
 </body>
 </html>
