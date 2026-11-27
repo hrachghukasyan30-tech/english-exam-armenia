@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EnglishExam — Tenses Test</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f8;color:#17202a;min-height:100vh}
+header{background:#111827;color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:700}.timer{font-size:20px;font-weight:700}
+.container{max-width:900px;margin:30px auto;padding:0 16px}
+.card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.info{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:24px;color:#566573}
+.question{font-size:21px;font-weight:700;line-height:1.5;margin-bottom:22px}
+.option{display:block;width:100%;text-align:left;background:#f7f9fb;border:2px solid #e1e7ed;border-radius:12px;padding:15px;margin:10px 0;cursor:pointer;font-size:16px}
+.option:hover{border-color:#6c7ae0}
+.option.selected{border-color:#4f46e5;background:#eef0ff}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:25px}
+button{border:0;border-radius:10px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer}
+.primary{background:#4f46e5;color:#fff}.secondary{background:#e5e7eb;color:#111827}
+button:disabled{opacity:.5;cursor:not-allowed}
+.progress{height:9px;background:#e5e7eb;border-radius:10px;overflow:hidden;margin:16px 0 25px}
+.progress-bar{height:100%;background:#4f46e5;width:0;transition:.2s}
+.result{text-align:center}.score{font-size:42px;font-weight:800;color:#4f46e5;margin:15px 0}
+.hidden{display:none}
+.review{margin-top:25px;text-align:left}.review-item{padding:14px;border-bottom:1px solid #e5e7eb}
+.correct{color:#15803d}.wrong{color:#dc2626}
+.loading{text-align:center;padding:60px}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">EnglishExam</div>
+<div class="timer" id="timer">60:00</div>
+</header>
+
+<div class="container">
+<div id="loading" class="card loading">Ստուգվում է մուտքը...</div>
+
+<div id="testCard" class="card hidden">
+<div class="info">
+<span>⏳ Tenses Test</span>
+<span id="counter">Հարց 1 / 40</span>
+<span>🎯 20 միավոր</span>
+</div>
+
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="question" id="question"></div>
+<div id="options"></div>
+
+<div class="nav">
+<button class="secondary" id="prevBtn" onclick="previousQuestion()">← Նախորդ</button>
+<button class="primary" id="nextBtn" onclick="nextQuestion()">Հաջորդ →</button>
+</div>
+</div>
+
+<div id="resultCard" class="card result hidden">
+<h2>Tenses Test — Արդյունք</h2>
+<div class="score" id="finalScore">0 / 20</div>
+<p id="resultText"></p>
+<div class="review" id="review"></div>
+<div style="margin-top:25px">
+<a href="index.html"><button class="primary">← Վերադառնալ գլխավոր էջ</button></a>
+</div>
+</div>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "https://zkmtvzbbaxwlscarstkc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VWDP871AYiFF0WaE2i03zA_X4P-MB9T";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const questions = [
+{q:"I ___ to school every day.",a:["go","went","am going","have gone"],c:0},
+{q:"She ___ her homework yesterday.",a:["does","did","has done","is doing"],c:1},
+{q:"They ___ dinner now.",a:["have","had","are having","were having"],c:2},
+{q:"He ___ in London since 2021.",a:["lives","lived","has lived","is living"],c:2},
+{q:"We ___ TV when the phone rang.",a:["watch","watched","were watching","have watched"],c:2},
+{q:"By the time I arrived, they ___.",a:["leave","left","had left","have left"],c:2},
+{q:"I ___ this movie three times.",a:["see","saw","have seen","am seeing"],c:2},
+{q:"She ___ to Paris last summer.",a:["goes","went","has gone","is going"],c:1},
+{q:"Look! The baby ___.",a:["cries","cried","is crying","has cried"],c:2},
+{q:"My father ___ in this company for ten years.",a:["works","worked","has worked","is working"],c:2},
+{q:"At 8 p.m. yesterday, I ___.",a:["study","studied","was studying","have studied"],c:2},
+{q:"He ___ the report before the meeting started.",a:["finishes","finished","had finished","has finished"],c:2},
+{q:"Tomorrow, we ___ our grandparents.",a:["visit","visited","will visit","have visited"],c:2},
+{q:"This time next week, I ___ on the beach.",a:["relax","relaxed","will be relaxing","have relaxed"],c:2},
+{q:"By next month, she ___ the course.",a:["completes","completed","will have completed","has completed"],c:2},
+{q:"I ___ breakfast before I went to school.",a:["eat","ate","had eaten","have eaten"],c:2},
+{q:"They ___ here for two hours.",a:["wait","waited","have been waiting","are waiting"],c:2},
+{q:"He ___ all morning, so he is tired.",a:["runs","ran","has been running","was running"],c:2},
+{q:"When I was a child, I ___ play outside every day.",a:["used to","am used to","use","have used"],c:0},
+{q:"She ___ already ___ the email.",a:["has / sent","did / send","is / sending","was / sent"],c:0},
+{q:"We ___ never ___ such a beautiful place.",a:["have / seen","did / see","are / seeing","were / seeing"],c:0},
+{q:"___ you ever visited Italy?",a:["Did","Have","Are","Were"],c:1},
+{q:"How long ___ you been studying English?",a:["do","did","have","are"],c:2},
+{q:"When ___ you arrive home yesterday?",a:["do","did","have","are"],c:1},
+{q:"She ___ to work before it started raining.",a:["goes","went","had gone","has gone"],c:2},
+{q:"I ___ him two days ago.",a:["see","saw","have seen","am seeing"],c:1},
+{q:"We ___ our exams next Friday.",a:["take","took","will take","have taken"],c:2},
+{q:"At this time tomorrow, they ___ to Armenia.",a:["travel","traveled","will be traveling","have traveled"],c:2},
+{q:"By 2030, scientists ___ new solutions.",a:["develop","developed","will have developed","are developing"],c:2},
+{q:"He ___ his keys, and now he can't open the door.",a:["loses","lost","has lost","was losing"],c:2},
+{q:"I ___ lunch when you called me.",a:["have","had","was having","am having"],c:2},
+{q:"The train ___ before we got to the station.",a:["leaves","left","had left","has left"],c:2},
+{q:"She ___ English for five years.",a:["studies","studied","has been studying","is studied"],c:2},
+{q:"They ___ football when it began to rain.",a:["play","played","were playing","have played"],c:2},
+{q:"I ___ my room already.",a:["clean","cleaned","have cleaned","am cleaning"],c:2},
+{q:"He ___ in Yerevan last year.",a:["lives","lived","has lived","is living"],c:1},
+{q:"We ___ dinner at 7 every evening.",a:["have","had","are having","have had"],c:0},
+{q:"She ___ by the time you call her.",a:["leaves","left","will have left","has left"],c:2},
+{q:"They ___ here since morning.",a:["are","were","have been","will be"],c:2},
+{q:"What ___ you doing when I saw you?",a:["are","were","have","did"],c:1}
+];
+
+let current=0;
+let answers=Array(questions.length).fill(null);
+let seconds=3600;
+let timerInterval=null;
+let user=null;
+let finished=false;
+
+function show(id){document.getElementById(id).classList.remove("hidden")}
+function hide(id){document.getElementById(id).classList.add("hidden")}
+
+async function init(){
+const {data:{session}}=await supabase.auth.getSession();
+
+if(!session){
+document.getElementById("loading").innerHTML =
+'Պետք է մուտք գործես։<br><br><a href="index.html"><button class="primary">Մուտք / Գրանցում</button></a>';
+return;
+}
+
+user=session.user;
+hide("loading");
+show("testCard");
+renderQuestion();
+timerInterval=setInterval(updateTimer,1000);
+}
+
+function renderQuestion(){
+const q=questions[current];
+
+document.getElementById("counter").textContent =
+`Հարց ${current+1} / ${questions.length}`;
+
+document.getElementById("question").textContent=q.q;
+
+const box=document.getElementById("options");
+box.innerHTML="";
+
+q.a.forEach((option,i)=>{
+const b=document.createElement("button");
+b.className="option"+(answers[current]===i?" selected":"");
+b.textContent=`${String.fromCharCode(65+i)}. ${option}`;
+b.onclick=()=>selectAnswer(i);
+box.appendChild(b);
+});
+
+document.getElementById("prevBtn").disabled=current===0;
+document.getElementById("nextBtn").textContent =
+current===questions.length-1 ? "Ավարտել ✓" : "Հաջորդ →";
+
+document.getElementById("progressBar").style.width =
+((current+1)/questions.length*100)+"%";
+}
+
+function selectAnswer(i){
+answers[current]=i;
+renderQuestion();
+}
+
+window.previousQuestion=()=>{
+if(current>0){
+current--;
+renderQuestion();
+}
+};
+
+window.nextQuestion=()=>{
+if(answers[current]===null){
+alert("Ընտրիր պատասխան։");
+return;
+}
+
+if(current<questions.length-1){
+current++;
+renderQuestion();
+}else{
+finishTest();
+}
+};
+
+function updateTimer(){
+seconds--;
+
+if(seconds<0){
+finishTest();
+return;
+}
+
+const m=Math.floor(seconds/60);
+const s=seconds%60;
+
+document.getElementById("timer").textContent =
+`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+
+if(seconds<=60){
+document.getElementById("timer").style.color="#fca5a5";
+}
+}
+
+async function finishTest(){
+if(finished)return;
+finished=true;
+
+clearInterval(timerInterval);
+
+let correct=0;
+
+questions.forEach((q,i)=>{
+if(answers[i]===q.c)correct++;
+});
+
+const score=correct*0.5;
+
+const {error}=await supabase.from("exam_results").insert({
+user_id:user.id,
+score:score,
+correct_answers:correct,
+total_questions:questions.length
+});
+
+hide("testCard");
+show("resultCard");
+
+document.getElementById("finalScore").textContent=`${score} / 20`;
+document.getElementById("resultText").textContent =
+`Ճիշտ պատասխաններ՝ ${correct} / ${questions.length}`;
+
+const review=document.getElementById("review");
+review.innerHTML="";
+
+questions.forEach((q,i)=>{
+const div=document.createElement("div");
+div.className="review-item";
+
+const ok=answers[i]===q.c;
+
+div.innerHTML=
+`<b>${i+1}. ${q.q}</b><br>
+Քո պատասխանը՝ <span class="${ok?'correct':'wrong'}">
+${answers[i]===null?'Չի ընտրվել':q.a[answers[i]]}
+</span><br>
+Ճիշտ պատասխանը՝ <span class="correct">${q.a[q.c]}</span>`;
+
+review.appendChild(div);
+});
+
+if(error)console.error("Supabase save error:",error);
+}
+
+init();
+</script>
+</body>
+</html>
